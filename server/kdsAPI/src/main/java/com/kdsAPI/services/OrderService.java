@@ -3,6 +3,7 @@ package com.kdsAPI.services;
 import java.util.List;
 
 import com.kdsAPI.dto.order.OrderDTO;
+import com.kdsAPI.exception.NotFoundException;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.repositories.OrderRepository;
 
@@ -24,7 +25,8 @@ public abstract class OrderService {
         return orderRepository.save(order.convertToDAO());
     }
     public FoodOrder getOrderById(Long id) {
-        return orderRepository.getReferenceById(id);
+        return orderRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException());
     }
 
     public abstract void setOrderRepository(OrderRepository repository);
