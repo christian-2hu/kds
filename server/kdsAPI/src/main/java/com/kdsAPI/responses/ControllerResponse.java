@@ -18,7 +18,7 @@ public class ControllerResponse<T> {
     }
 
     public ResponseEntity<Response<T>> errorResponse(HttpStatus status, String error, T type) {
-        Response<T> response = new Response<>(status.value(), null, type);
+        Response<T> response = new Response<>(status.value(), error, type);
         return new ResponseEntity<Response<T>>(response, status);
     }
 }
