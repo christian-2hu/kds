@@ -1,6 +1,7 @@
 package com.kdsAPI.models;
 
 import com.kdsAPI.order.Order;
+import com.kdsAPI.order.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +27,6 @@ public class FoodOrder implements Order {
     private Long id;
     // TODO: create an object for an order instead of using a string
     private String foodOrder;
-    // TODO: create an object for order status instead of using a string
-    private String foodOrderStatus;
+    private OrderStatus foodOrderStatus;
 
 }
