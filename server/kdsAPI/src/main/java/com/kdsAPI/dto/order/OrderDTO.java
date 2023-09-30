@@ -3,6 +3,7 @@ package com.kdsAPI.dto.order;
 import com.kdsAPI.dto.DTO;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.order.Order;
+import com.kdsAPI.order.OrderStatus;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Null;
@@ -26,8 +27,7 @@ public class OrderDTO implements DTO<FoodOrder>, Order{
     // TODO: create an object for an order instead of using a string
     private String foodOrder;
     @NotEmpty(message = notEmptyMessage)
-    // TODO: create an object for order status instead of using a string
-    private String foodOrderStatus;
+    private OrderStatus foodOrderStatus;
 
     public OrderDTO(Long id, String order) {
         this.id = id;
