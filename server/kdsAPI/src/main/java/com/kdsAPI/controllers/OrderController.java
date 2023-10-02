@@ -17,7 +17,7 @@ import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.responses.ControllerResponse;
 import com.kdsAPI.responses.Response;
-import com.kdsAPI.services.OrderService;
+import com.kdsAPI.services.AbstractService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,36 +27,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService storeOrderService;
+    private final AbstractService<FoodOrder, OrderDTO> storeOrderService;
     private final ControllerResponse<FoodOrder> response;
     
     @GetMapping
     public List<FoodOrder> getOrders() {
-        return storeOrderService.getOrders();
+        return storeOrderService.getAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<FoodOrder>> getOrder(@PathVariable Long id) {
-        FoodOrder foundOrder = storeOrderService.getOrderById(id);
+        FoodOrder foundOrder = storeOrderService.getById(id);
         return response.ok(foundOrder);
     }
 
     @PostMapping
     public ResponseEntity<Response<FoodOrder>> save(@Valid @RequestBody OrderDTO order) {
-        FoodOrder saveOrder = storeOrderService.saveOrder(order);
+        FoodOrder saveOrder = storeOrderService.save(order);
         return response.ok(saveOrder);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<FoodOrder>> delete(@PathVariable Long id) {
-        storeOrderService.deleteOrder(id);
+        storeOrderService.deleteById(id);
         return response.customResponse(HttpStatus.NO_CONTENT, null);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Response<FoodOrder>> update(@PathVariable Long id, @Valid @RequestBody OrderDTO order) {
         order.setId(id);
-        FoodOrder updatedFoodOrder = storeOrderService.updateOrder(order);
+        FoodOrder updatedFoodOrder = storeOrderService.update(order);
         return response.ok(updatedFoodOrder);
     }
 }
