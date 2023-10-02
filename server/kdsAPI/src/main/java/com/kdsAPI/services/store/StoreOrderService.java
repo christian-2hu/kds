@@ -1,27 +1,22 @@
 package com.kdsAPI.services.store;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.models.FoodOrder;
-import com.kdsAPI.repositories.OrderRepository;
-import com.kdsAPI.services.OrderService;
-
-import lombok.RequiredArgsConstructor;
+import com.kdsAPI.services.AbstractService;
 
 @Service
-@RequiredArgsConstructor
-public class StoreOrderService extends OrderService {
+public class StoreOrderService extends AbstractService<FoodOrder, OrderDTO> {
 
-    @Override
-    public FoodOrder saveOrder(OrderDTO order) {
-        return orderRepository.save(order.convertToDAO());
+    public StoreOrderService(JpaRepository<FoodOrder, Long> repository) {
+        super(repository);
     }
 
     @Override
-    @Autowired
-    public void setOrderRepository(OrderRepository repository) {
-        this.orderRepository = repository;
+    public FoodOrder save(OrderDTO order) {
+        return repository.save(order.convertToDAO());
     }
+
 }
