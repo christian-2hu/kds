@@ -1,6 +1,5 @@
 package com.kdsAPI.dto.order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.kdsAPI.dto.DTO;
@@ -9,46 +8,27 @@ import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.order.Order;
 import com.kdsAPI.order.OrderStatus;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
 @Getter
 @Setter
-@AllArgsConstructor
-public class OrderDTO implements DTO<FoodOrder>, Order{
-
-    private final String notEmptyMessage = "This field cannot be empty";
-    private final String nullMessage = "This field should be empty";
-    
-    @Null(message = nullMessage)
-    private Long id;
-    @NotEmpty(message = notEmptyMessage)
-    private List<FoodItem> foodItem;
-    @NotNull(message = notEmptyMessage)
-    private OrderStatus foodOrderStatus;
+public class OrderDTO extends Order implements DTO<FoodOrder>{
 
     public OrderDTO() {
-        this.foodItem = new ArrayList<>();
-        this.foodOrderStatus = OrderStatus.WAITING;
+        super();
     }
 
-    @Override
-    public void addFoodItem(FoodItem foodItem) {
-        this.foodItem.add(foodItem);
+    public OrderDTO(Long id, OrderStatus fooOrderStatus) {
+        super(id, fooOrderStatus);
     }
-    @Override
-    public void deleteFoodItem(FoodItem foodItem) {
-        this.foodItem.remove(foodItem);
+
+    public OrderDTO(Long id, List<FoodItem> foodItem, List<Integer> quantity, OrderStatus fooOrderStatus) {
+        super(id, foodItem, quantity, fooOrderStatus);
     }
 
     @Override
     public FoodOrder convertToDAO() {
-        return new FoodOrder(id, foodItem, foodOrderStatus);
+        return new FoodOrder(id, foodItem, quantity, foodOrderStatus);
     }
 }
