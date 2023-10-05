@@ -18,7 +18,7 @@ public abstract class AbstractService<T, U extends DTO<T>> {
         return repository.findAll();
     }
 
-    public abstract T save(U order);
+    public abstract T save(U dto);
 
     public void deleteById(Long id) {
         repository.deleteById(id);
