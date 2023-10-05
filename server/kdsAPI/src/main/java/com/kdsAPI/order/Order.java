@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.kdsAPI.models.FoodItem;
-import com.kdsAPI.models.FoodOrder;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.GeneratedValue;
@@ -58,7 +57,7 @@ public abstract class Order {
         this.quantity.add(quantity);
     }
     public void deleteFoodItem(FoodItem item) {
-        int quantityIndex = FoodOrder.<FoodItem>getIndexFromIterator(this.foodItem.iterator(), item);
+        int quantityIndex = Order.<FoodItem>getIndexFromIterator(this.foodItem.iterator(), item);
         this.quantity.remove(quantityIndex);
         this.foodItem.remove(item);
     }
