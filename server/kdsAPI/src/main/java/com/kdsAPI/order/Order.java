@@ -26,7 +26,9 @@ public abstract class Order {
     protected Long id;
     @ManyToMany
     @NotNull(message = "\"This field cannot be empty\"")
-    protected List<FoodItem> foodItem;
+    protected List<FoodItem> foodItem; // TODO: Use a map instead of two data structures
+                                       // the ideal would be something like: Map<FoodItem, Integer>
+                                       // but i don't know if hibernate allows it
     @ElementCollection
     @NotNull(message = "\"This field cannot be empty\"")
     protected List<Integer> quantity;
