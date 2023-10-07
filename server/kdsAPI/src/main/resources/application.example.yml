@@ -3,7 +3,7 @@ spring:
     show-sql: true
     database: POSTGRESQL
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
     username: postgres
     password: postgres
