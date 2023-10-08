@@ -1,1 +1,33 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
+
+:root {
+  --preparando-color: #1b4478;
+  --aguardando-color: #c93434;
+  --pronto-color: #3e9e49;
+  --cancelado-color: #878787;
+}
+
+body {
+  font-size: 16px;
+  background-color: #dddddd;
+}
+
+.preparando .color,
+.preparando-color {
+  background-color: var(--preparando-color) !important;
+}
+
+.aguardando .color,
+.aguardando-color {
+  background-color: var(--aguardando-color) !important;
+}
+
+.pronto .color,
+.pronto-color {
+  background-color: var(--pronto-color) !important;
+}
+
+.cancelado .color,
+.cancelado-color {
+  background-color: var(--cancelado-color) !important;
+}
