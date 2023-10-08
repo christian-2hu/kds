@@ -1,0 +1,14 @@
+.default-btn {
+  background-color: #bb2626;
+  color: #fff;
+  font-weight: bold;
+}
+.default-btn:hover {
+  background-color: #9c2121;
+}
+
+.default-btn:active {
+  background-color: #da2d2d;
+  color: #fff;
+  border-color: #da2d2d;
+}
