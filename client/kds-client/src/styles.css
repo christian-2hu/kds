@@ -2,9 +2,20 @@
 
 :root {
   --preparando-color: #1b4478;
+  --preparando-color-hover: #2960a8;
   --aguardando-color: #c93434;
   --pronto-color: #3e9e49;
   --cancelado-color: #878787;
+  --cancelado-color-hover: #6c6c6c;
+  --cancelado-color-active: #9e9d9d;
+  --sidebar-bg: #2f4050;
+  --sidebar-item-hover-bg: #293846;
+  --menu-item-color: #a7b1c2;
+  --menu-item-color-hover: #ffffff;
+  --menu-item-active: var(--menu-item-color-hover);
+  --hidden-sidebar-width: 70px;
+  --displayed-sidebar-width: 210px;
+  --sidebar-transition: 0.4s;
 }
 
 body {

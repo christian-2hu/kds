@@ -1,0 +1,68 @@
+<div
+  class="sidebarMenu"
+  [ngClass]="hideSidebar ? 'escondeSidebar' : 'mostraSideBar'"
+>
+  <app-user-info
+    [escondeSidebar]="hideSidebar"
+    [escondeSidebarTexto]="hideSidebarText"
+  ></app-user-info>
+  <div class="menu">
+    <div class="sideBarOrta">
+      <ul class="nav flex-column overflow">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/orders" routerLinkActive="active">
+            <!-- <a class="nav-link active" href="#"> -->
+            <span class="navIcon">
+              <fa-icon [icon]="burgerIcon"></fa-icon>
+            </span>
+            <span
+              [ngClass]="
+                hideSidebarText
+                  ? 'esconderNavlink'
+                  : 'mostrarNavlink animated fadeInRight'
+              "
+              >Orders</span
+            >
+          </a>
+        </li>
+
+        <li class="nav-item" (click)="hideList()">
+          <a class="nav-link">
+            <span class="navIcon">
+              <fa-icon [icon]="settingsIcon"></fa-icon>
+            </span>
+            <span
+              [ngClass]="
+                hideSidebarText
+                  ? 'esconderNavlink'
+                  : 'mostrarNavlink animated fadeInRight'
+              "
+            >
+              Settings
+            </span>
+            <div
+              *ngIf="hideIcon; then hideIconTemplate; else showIconTemplate"
+            ></div>
+            <ng-template #hideIconTemplate>
+              <span class="showHideIcons"
+                ><fa-icon [icon]="arrowRightIcon"></fa-icon></span
+            ></ng-template>
+            <ng-template #showIconTemplate>
+              <span class="showHideIcons">
+                <fa-icon [icon]="arrowDownIcon"></fa-icon>
+              </span>
+            </ng-template>
+            <ul
+              class="menu"
+              [ngClass]="hideSidebarText ? 'esconderLista' : ''"
+              [@trigger]="state"
+            >
+              <li class="menu-item">User settings</li>
+              <li class="menu-item">Change password</li>
+            </ul>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

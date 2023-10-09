@@ -8,6 +8,9 @@ import { OrdersComponent } from './components/shared/order/orders.component';
 import { OrderInfoComponent } from './components/shared/order-info/order-info.component';
 import { ButtonComponent } from './components/shared/button/button.component';
 import { OrderComponent } from './components/order/order.component';
+import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserInfoComponent } from './components/shared/sidebar/user-info/user-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
@@ -17,11 +20,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     OrderInfoComponent,
     ButtonComponent,
     OrderComponent,
+    SidebarComponent,
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     FontAwesomeModule,
   ],
   providers: [],
