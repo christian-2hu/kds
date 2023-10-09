@@ -1,0 +1,55 @@
+<div class="orders">
+  <ng-template ngFor let-order [ngForOf]="foodOrders" let-i="index"
+    ><div class="order">
+      <div
+        [ngClass]="{
+          'preparando-color': order.foodOrderStatus == orderStatus[orderStatus.PREPARING],
+          'aguardando-color': order.foodOrderStatus == orderStatus[orderStatus.WAITING],
+          'pronto-color': order.foodOrderStatus == orderStatus[orderStatus.COMPLETE],
+          'cancelado-color': order.foodOrderStatus == orderStatus[orderStatus.CANCELED],
+        }"
+        class="orderHeader"
+      >
+        <span class="time ms-2">18:28</span>
+        <span class="id me-2"> Pedido #{{ order.id }}</span>
+      </div>
+      <div class="orderBody">
+        <div class="item py-1">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Qt.</th>
+                <th scope="col">Pedido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let foodItem of order.foodItem; index as i">
+                <td>{{ order.quantity[i] }}</td>
+                <td>
+                  {{ foodItem.item }}
+                  <ul *ngIf="foodItem.recipe != undefined" class="recipe">
+                    <li>
+                      {{ foodItem.recipe }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          *ngIf="order.observation != undefined"
+          class="observation mx-2 mb-3"
+        >
+          <div class="title">Observação do cliente:</div>
+          <div class="body">
+            {{ order.observation }}
+          </div>
+        </div>
+      </div>
+      <div class="orderBtn">
+        <app-button class="preparar-btn" btnText="Preparar"></app-button>
+        <app-button class="cancel-btn" btnText="Cancelar"></app-button>
+      </div></div
+  ></ng-template>
+</div>

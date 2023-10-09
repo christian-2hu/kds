@@ -1,18 +1,36 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
+import { OrdersComponent } from './components/shared/order/orders.component';
+import { OrderInfoComponent } from './components/shared/order-info/order-info.component';
+import { ButtonComponent } from './components/shared/button/button.component';
+import { OrderComponent } from './components/order/order.component';
+import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserInfoComponent } from './components/shared/sidebar/user-info/user-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    OrdersComponent,
+    OrderInfoComponent,
+    ButtonComponent,
+    OrderComponent,
+    SidebarComponent,
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FontAwesomeModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
