@@ -12,3 +12,24 @@
   color: #fff;
   border-color: #da2d2d;
 }
+
+:host-context(.cancel-btn) button {
+  background-color: var(--cancelado-color);
+  border-color: var(--cancelado-color);
+}
+
+:host-context(.cancel-btn) button:hover {
+  background-color: var(--cancelado-color-hover);
+}
+
+:host-context(.cancel-btn) button:active {
+  background-color: var(--cancelado-color-hover);
+}
+
+:host-context(.preparar-btn) button {
+  background-color: var(--preparando-color);
+}
+
+:host-context(.preparar-btn) button:hover {
+  background-color: var(--preparando-color-hover);
+}
