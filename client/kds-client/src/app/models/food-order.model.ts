@@ -5,6 +5,6 @@ export interface FoodOrder {
   id?: number;
   foodItem: FoodItem[];
   quantity: number[];
-  foodOrderStatus: OrderStatus;
+  foodOrderStatus: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED';
   observation?: string;
 }

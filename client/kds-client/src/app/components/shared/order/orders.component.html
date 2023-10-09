@@ -3,10 +3,10 @@
     ><div class="order">
       <div
         [ngClass]="{
-          'preparando-color': order.foodOrderStatus == orderStatus.PREPARING,
-          'aguardando-color': order.foodOrderStatus == orderStatus.WAITING,
-          'pronto-color': order.foodOrderStatus == orderStatus.COMPLETE,
-          'cancelado-color': order.foodOrderStatus == orderStatus.CANCELED,
+          'preparando-color': order.foodOrderStatus == orderStatus[orderStatus.PREPARING],
+          'aguardando-color': order.foodOrderStatus == orderStatus[orderStatus.WAITING],
+          'pronto-color': order.foodOrderStatus == orderStatus[orderStatus.COMPLETE],
+          'cancelado-color': order.foodOrderStatus == orderStatus[orderStatus.CANCELED],
         }"
         class="orderHeader"
       >
