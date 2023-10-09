@@ -1,28 +1,10 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OrderComponent } from './components/order/order.component';
-import { OrderService } from './services/order/order.service';
-import { catchError, forkJoin, map, of } from 'rxjs';
 
-const routes: Routes = [
-  {
-    path: 'orders',
-    component: OrderComponent,
-    resolve: {
-      data: () => {
-        let orders = inject(OrderService).getOrders();
-        return orders.pipe(
-          catchError(() => {
-            return of({ error: 'Server failed' });
-          })
-        );
-      },
-    },
-  },
-];
+const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
