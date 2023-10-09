@@ -64,3 +64,12 @@ li {
   font-weight: bold;
   font-size: 15px;
 }
+
+.orderBtn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.test {
+  background-color: var(--cancelado-color) !important;
+}

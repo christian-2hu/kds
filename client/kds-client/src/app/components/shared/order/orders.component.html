@@ -1,5 +1,5 @@
 <div class="orders">
-  <ng-template ngFor let-order [ngForOf]="orders" let-i="index"
+  <ng-template ngFor let-order [ngForOf]="foodOrders" let-i="index"
     ><div class="order">
       <div
         [ngClass]="{
@@ -27,7 +27,7 @@
                 <td>{{ order.quantity[i] }}</td>
                 <td>
                   {{ foodItem.item }}
-                  <ul class="recipe">
+                  <ul *ngIf="foodItem.recipe != undefined" class="recipe">
                     <li>
                       {{ foodItem.recipe }}
                     </li>
@@ -37,7 +37,10 @@
             </tbody>
           </table>
         </div>
-        <div class="observation mx-2 mb-3">
+        <div
+          *ngIf="order.observation != undefined"
+          class="observation mx-2 mb-3"
+        >
           <div class="title">Observação do cliente:</div>
           <div class="body">
             {{ order.observation }}
@@ -45,8 +48,8 @@
         </div>
       </div>
       <div class="orderBtn">
-        <app-button btnText="Preparar"></app-button>
-        <app-button btnText="Dar o pronto"></app-button>
+        <app-button class="preparar-btn" btnText="Preparar"></app-button>
+        <app-button class="cancel-btn" btnText="Cancelar"></app-button>
       </div></div
   ></ng-template>
 </div>
