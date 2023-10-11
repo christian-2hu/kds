@@ -33,11 +33,3 @@
 :host-context(.preparar-btn) button:hover {
   background-color: var(--preparando-color-hover);
 }
-
-:host-context(.finalizar-btn) button {
-  background-color: var(--pronto-color);
-}
-
-:host-context(.finalizar-btn) button:hover {
-  background-color: var(--pronto-color-hover);
-}
