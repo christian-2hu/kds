@@ -24,5 +24,6 @@ public class FoodItem implements Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String item;
+    private String recipe;
 
 }

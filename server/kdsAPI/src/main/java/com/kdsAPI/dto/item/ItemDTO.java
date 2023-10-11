@@ -22,10 +22,11 @@ public class ItemDTO implements DTO<FoodItem>, Item {
     private Long id;
     @NotEmpty(message = notEmptyMessage)
     private String item;
+    private String recipe;
 
     @Override
     public FoodItem convertToDAO() {
-        return new FoodItem(id, item);
+        return new FoodItem(id, item, recipe);
     }
 
 }
