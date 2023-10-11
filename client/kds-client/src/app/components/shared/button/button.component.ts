@@ -9,6 +9,7 @@ export class ButtonComponent {
   @Output() onClick: EventEmitter<any> = new EventEmitter();
   @Input() btnText: string = 'Click';
   @Input() btnType: string = 'submit';
+  @Input() isBtnDisabled: boolean = false;
 
   public click(): void {
     this.onClick.emit();
