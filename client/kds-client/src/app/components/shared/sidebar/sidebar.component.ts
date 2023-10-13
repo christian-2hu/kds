@@ -13,6 +13,7 @@ import {
   faCaretDown,
   faBurger,
   faGear,
+  faBoxArchive,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -80,6 +81,7 @@ export class SidebarComponent implements OnInit {
   public arrowDownIcon = faCaretDown;
   public burgerIcon = faBurger;
   public settingsIcon = faGear;
+  public archiveIcon = faBoxArchive;
   constructor() {}
 
   public ngOnInit(): void {

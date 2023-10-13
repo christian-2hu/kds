@@ -13,6 +13,10 @@ export class OrderService {
     return this.http.get<FoodOrder[]>(`${Environment.api}/order`);
   }
 
+  public getArchivedOrders() {
+    return this.http.get<FoodOrder[]>(`${Environment.api}/order/archive`);
+  }
+
   public addOrder(order: FoodOrder) {
     return this.http.post<Response<FoodOrder>>(
       `${Environment.api}/order`,

@@ -34,11 +34,12 @@ export class OrdersComponent {
       next: (response) => {
         switch (response.body?.foodOrderStatus) {
           case 'COMPLETE':
+            this.deleteOrderFromArray(order);
             Swal.fire({
               position: 'top-end',
               icon: 'success',
               title: `Pedido #${response.body.id} foi finalizado!`,
-              text: 'O pedido foi finalizado! Você pode removê-lo desta página clicando no botão "Remover".',
+              text: 'O pedido foi removido desta página, você pode vê-lo novamente no arquivo.',
               showConfirmButton: true,
               timer: 3500,
             });
@@ -80,7 +81,6 @@ export class OrdersComponent {
       title: `Finalizar pedido ${order.id}?`,
       text: `Você está finzalidando o pedido ${order.id}, está ação não é reversível e você não poderá mais interagir com esse pedido.`,
       showDenyButton: true,
-      showCancelButton: true,
       confirmButtonText: 'Finalizar',
       denyButtonText: `Não finalizar`,
     });

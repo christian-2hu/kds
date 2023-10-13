@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FoodOrder } from 'src/app/models/food-order.model';
 
@@ -7,7 +7,7 @@ import { FoodOrder } from 'src/app/models/food-order.model';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css'],
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
   public orders: FoodOrder[] = [];
 
   constructor(private activatedRoute: ActivatedRoute) {}
