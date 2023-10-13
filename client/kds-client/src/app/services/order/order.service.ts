@@ -19,4 +19,19 @@ export class OrderService {
       order
     );
   }
+
+  public updateOrder(order: FoodOrder) {
+    const id = order.id;
+    return this.http.put<Response<FoodOrder>>(
+      `${Environment.api}/order/${id}`,
+      order
+    );
+  }
+
+  public deleteOrder(order: FoodOrder) {
+    const id = order.id;
+    return this.http.delete<Response<FoodOrder>>(
+      `${Environment.api}/order/${id}`
+    );
+  }
 }

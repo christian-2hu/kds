@@ -48,8 +48,91 @@
         </div>
       </div>
       <div class="orderBtn">
-        <app-button class="preparar-btn" btnText="Preparar"></app-button>
-        <app-button class="cancel-btn" btnText="Cancelar"></app-button>
+        <div
+          *ngIf="
+            order.foodOrderStatus == orderStatus[orderStatus.PREPARING];
+            then showCompleteButton;
+            else showButton
+          "
+        ></div>
+        <ng-template #showCompleteButton
+          ><app-button
+            (onClick)="
+              changeOrderStatusFromGivenOrder(
+                order,
+                orderStatus[orderStatus.COMPLETE]
+              )
+            "
+            class="finalizar-btn"
+            btnText="Finalizar"
+          ></app-button
+        ></ng-template>
+        <ng-template #showButton>
+          <div
+            *ngIf="
+              order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
+              then showDisabledCompleteButton;
+              else ShowPrepareButton
+            "
+          ></div>
+          <ng-template #showDisabledCompleteButton
+            ><app-button
+              (onClick)="
+                changeOrderStatusFromGivenOrder(
+                  order,
+                  orderStatus[orderStatus.COMPLETE]
+                )
+              "
+              class="finalizar-btn"
+              btnText="Finalizar"
+              [isBtnDisabled]="true"
+            ></app-button
+          ></ng-template>
+          <ng-template #ShowPrepareButton>
+            <app-button
+              (onClick)="
+                changeOrderStatusFromGivenOrder(
+                  order,
+                  orderStatus[orderStatus.PREPARING]
+                )
+              "
+              class="preparar-btn"
+              btnText="Preparar"
+            ></app-button
+          ></ng-template>
+        </ng-template>
+
+        <div
+          *ngIf="
+            order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
+            then showRemoveAndDisabledCancelButton;
+            else ShowCancelButton
+          "
+        ></div>
+        <ng-template #showRemoveAndDisabledCancelButton>
+          <app-button
+            (onClick)="removeOrder(order)"
+            class="cancel-btn"
+            btnText="Remover"
+          ></app-button>
+          <app-button
+            class="cancel-btn"
+            btnText="Cancelar"
+            [isBtnDisabled]="true"
+          ></app-button>
+        </ng-template>
+        <ng-template #ShowCancelButton>
+          <app-button
+            (onClick)="
+              changeOrderStatusFromGivenOrder(
+                order,
+                orderStatus[orderStatus.CANCELED]
+              )
+            "
+            class="cancel-btn"
+            btnText="Cancelar"
+          ></app-button
+        ></ng-template>
       </div></div
   ></ng-template>
 </div>
