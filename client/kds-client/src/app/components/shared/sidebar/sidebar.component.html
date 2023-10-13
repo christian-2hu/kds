@@ -26,6 +26,23 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/archive" routerLinkActive="active">
+            <!-- <a class="nav-link active" href="#"> -->
+            <span class="navIcon">
+              <fa-icon [icon]="archiveIcon"></fa-icon>
+            </span>
+            <span
+              [ngClass]="
+                hideSidebarText
+                  ? 'esconderNavlink'
+                  : 'mostrarNavlink animated fadeInRight'
+              "
+              >Archive</span
+            >
+          </a>
+        </li>
+
         <li class="nav-item" (click)="hideList()">
           <a class="nav-link">
             <span class="navIcon">

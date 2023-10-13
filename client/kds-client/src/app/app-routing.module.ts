@@ -19,6 +19,20 @@ const routes: Routes = [
       },
     },
   },
+  {
+    path: 'archive',
+    component: OrderComponent,
+    resolve: {
+      data: () => {
+        let orders = inject(OrderService).getArchivedOrders();
+        return orders.pipe(
+          catchError(() => {
+            return of({ error: 'Server failed' });
+          })
+        );
+      },
+    },
+  },
 ];
 
 @NgModule({
