@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.models.FoodOrder;
+import com.kdsAPI.repositories.OrderRepository;
 import com.kdsAPI.responses.ControllerResponse;
 import com.kdsAPI.responses.Response;
 import com.kdsAPI.services.AbstractService;
+import com.kdsAPI.services.state.FoodOrderCompleteStateService;
+import com.kdsAPI.services.state.FoodOrderState;
+import com.kdsAPI.services.state.FoodOrderWaitingStateService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +33,19 @@ public class OrderController {
 
     private final AbstractService<FoodOrder, OrderDTO> storeOrderService;
     private final ControllerResponse<FoodOrder> response;
-    
+    private FoodOrderState foodOrderState;
+
+
     @GetMapping
     public List<FoodOrder> getOrders() {
-        return storeOrderService.getAll();
+        foodOrderState = new FoodOrderWaitingStateService((OrderRepository)storeOrderService.getRepository());
+        return foodOrderState.getAll();
+    }
+
+    @GetMapping("/archive")
+    public List<FoodOrder> getCompleteOrders() {
+        foodOrderState = new FoodOrderCompleteStateService((OrderRepository)storeOrderService.getRepository());
+        return foodOrderState.getAll();
     }
 
     @GetMapping("/{id}")
