@@ -17,6 +17,11 @@
               <app-order-info></app-order-info>
             </div>
           </div>
+          <p-progressBar
+            *ngIf="loading"
+            mode="indeterminate"
+            [style]="{ height: '2px' }"
+          ></p-progressBar>
         </div>
       </div>
     </div>

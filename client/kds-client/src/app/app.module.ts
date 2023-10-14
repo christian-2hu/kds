@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserInfoComponent } from './components/shared/sidebar/user-info/user-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { ProgressBarModule } from 'primeng/progressbar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +31,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    ProgressBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
