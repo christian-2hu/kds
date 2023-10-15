@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FoodOrder } from 'src/app/models/food-order.model';
+import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
 
 @Component({
   selector: 'app-order',
@@ -14,8 +15,8 @@ export class OrderComponent implements OnInit {
 
   public ngOnInit(): void {
     this.activatedRoute.data.subscribe((data) => {
-      let orders: FoodOrder[] = data['data'];
-      this.orders = orders;
+      let response: PaginatedContentResponse<FoodOrder[]> = data['data'];
+      this.orders = response.content;
     });
   }
 }

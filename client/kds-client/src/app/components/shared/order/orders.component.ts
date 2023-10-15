@@ -32,13 +32,14 @@ export class OrdersComponent {
     order.foodOrderStatus = orderStatusLiteral;
     this.orderService.updateOrder(order).subscribe({
       next: (response) => {
-        switch (response.body?.foodOrderStatus) {
+        let updatedOrder: FoodOrder = response.data as FoodOrder;
+        switch (updatedOrder.foodOrderStatus) {
           case 'COMPLETE':
             this.deleteOrderFromArray(order);
             Swal.fire({
               position: 'top-end',
               icon: 'success',
-              title: `Pedido #${response.body.id} foi finalizado!`,
+              title: `Pedido #${updatedOrder.id} foi finalizado!`,
               text: 'O pedido foi removido desta página, você pode vê-lo novamente no arquivo.',
               showConfirmButton: true,
               timer: 3500,
