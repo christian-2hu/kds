@@ -1,6 +1,5 @@
 package com.kdsAPI.responses;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Response<T> {
-    private int status;
-    private String error;
-    private T data;
+public class PaginationResponse {
+    private Long totalRecords;
+    private Integer totalPages;
+    private Integer currentPage;    
 }

@@ -1,6 +1,8 @@
 package com.kdsAPI.responses;
 
 
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Response<T> {
-    private int status;
-    private String error;
-    private T data;
+@Component
+public class PaginatedContentResponse<T> {
+    private T content;
+    private PaginationResponse pagination;
 }

@@ -1,7 +1,8 @@
 package com.kdsAPI.repositories;
 
-import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,8 +11,8 @@ import com.kdsAPI.order.OrderStatus;
 
 public interface OrderRepository extends JpaRepository<FoodOrder, Long>{
    @Query("SELECT foodOrder from FoodOrder foodOrder WHERE foodOrder.foodOrderStatus != OrderStatus.COMPLETE ORDER BY foodOrder.id ASC")
-    public List<FoodOrder> findAll();
+    public Page<FoodOrder> findAll(Pageable pageable);
 
-    public List<FoodOrder> findByFoodOrderStatus(OrderStatus foodOrderStatus);
+    public Page<FoodOrder> findByFoodOrderStatus(OrderStatus foodOrderStatus, Pageable pageable);
 
 }
