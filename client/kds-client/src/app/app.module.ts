@@ -14,6 +14,7 @@ import { UserInfoComponent } from './components/shared/sidebar/user-info/user-in
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { ProgressBarModule } from 'primeng/progressbar';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
     BrowserAnimationsModule,
     FontAwesomeModule,
     ProgressBarModule,
+    PaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
