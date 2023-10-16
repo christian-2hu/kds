@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Environment } from 'src/app/environment/environment';
 import { FoodOrder } from 'src/app/models/food-order.model';
+import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
 import { Response } from 'src/app/models/server-response.model';
 @Injectable({
   providedIn: 'root',
@@ -9,12 +10,16 @@ import { Response } from 'src/app/models/server-response.model';
 export class OrderService {
   constructor(private http: HttpClient) {}
 
-  public getOrders() {
-    return this.http.get<FoodOrder[]>(`${Environment.api}/order`);
+  public getOrders(page: number = 0) {
+    return this.http.get<PaginatedContentResponse<FoodOrder[]>>(
+      `${Environment.api}/order?pageNumber=${page}`
+    );
   }
 
-  public getArchivedOrders() {
-    return this.http.get<FoodOrder[]>(`${Environment.api}/order/archive`);
+  public getArchivedOrders(page: number = 0) {
+    return this.http.get<PaginatedContentResponse<FoodOrder[]>>(
+      `${Environment.api}/order/archive?pageNumber=${page}`
+    );
   }
 
   public addOrder(order: FoodOrder) {

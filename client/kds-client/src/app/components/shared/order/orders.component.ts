@@ -1,7 +1,12 @@
 import { ReturnStatement } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PaginatorState } from 'primeng/paginator';
+import { Observable } from 'rxjs';
 import { OrderStatus } from 'src/app/models/food-order-status.model';
 import { FoodOrder } from 'src/app/models/food-order.model';
+import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
+import { PaginationResponse } from 'src/app/models/pagination-response.model';
 import { OrderService } from 'src/app/services/order/order.service';
 import Swal from 'sweetalert2';
 
@@ -13,8 +18,9 @@ import Swal from 'sweetalert2';
 export class OrdersComponent {
   public orderStatus = OrderStatus;
   @Input({ required: true }) public foodOrders: FoodOrder[] = [];
+  @Input({ required: true }) public ordersPagination!: PaginationResponse;
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private router: Router) {}
 
   public async changeOrderStatusFromGivenOrder(
     order: FoodOrder,
@@ -63,6 +69,22 @@ export class OrdersComponent {
           showConfirmButton: true,
           timer: 3500,
         });
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  public onPageChange(pageEvent: PaginatorState) {
+    let ordersObservable: Observable<PaginatedContentResponse<FoodOrder[]>>;
+    ordersObservable = this.orderService.getOrders(pageEvent.page);
+
+    if (this.router.url == '/archive') {
+      ordersObservable = this.orderService.getArchivedOrders(pageEvent.page);
+    }
+
+    ordersObservable.subscribe({
+      next: (response) => {
+        this.foodOrders = response.content;
       },
       error: (error) => console.log(error),
     });

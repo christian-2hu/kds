@@ -1,3 +1,8 @@
+.orders-body {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .orders {
   justify-content: center;
   align-items: center;

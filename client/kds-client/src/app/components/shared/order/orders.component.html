@@ -1,81 +1,62 @@
-<div class="orders">
-  <ng-template ngFor let-order [ngForOf]="foodOrders" let-i="index"
-    ><div class="order">
-      <div
-        [ngClass]="{
-          'preparando-color': order.foodOrderStatus == orderStatus[orderStatus.PREPARING],
-          'aguardando-color': order.foodOrderStatus == orderStatus[orderStatus.WAITING],
-          'pronto-color': order.foodOrderStatus == orderStatus[orderStatus.COMPLETE],
-          'cancelado-color': order.foodOrderStatus == orderStatus[orderStatus.CANCELED],
-        }"
-        class="orderHeader"
-      >
-        <span class="time ms-2">18:28</span>
-        <span class="id me-2"> Pedido #{{ order.id }}</span>
-      </div>
-      <div class="orderBody">
-        <div class="item py-1">
-          <table class="table table-hover table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Qt.</th>
-                <th scope="col">Pedido</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let foodItem of order.foodItem; index as i">
-                <td>{{ order.quantity[i] }}</td>
-                <td>
-                  {{ foodItem.item }}
-                  <ul *ngIf="foodItem.recipe != undefined" class="recipe">
-                    <li>
-                      {{ foodItem.recipe }}
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+<div class="orders-body">
+  <div class="orders">
+    <ng-template ngFor let-order [ngForOf]="foodOrders" let-i="index">
+      <div class="order">
         <div
-          *ngIf="order.observation != undefined"
-          class="observation mx-2 mb-3"
+          [ngClass]="{
+            'preparando-color': order.foodOrderStatus == orderStatus[orderStatus.PREPARING],
+            'aguardando-color': order.foodOrderStatus == orderStatus[orderStatus.WAITING],
+            'pronto-color': order.foodOrderStatus == orderStatus[orderStatus.COMPLETE],
+            'cancelado-color': order.foodOrderStatus == orderStatus[orderStatus.CANCELED],
+          }"
+          class="orderHeader"
         >
-          <div class="title">Observação do cliente:</div>
-          <div class="body">
-            {{ order.observation }}
+          <span class="time ms-2">18:28</span>
+          <span class="id me-2"> Pedido #{{ order.id }}</span>
+        </div>
+        <div class="orderBody">
+          <div class="item py-1">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Qt.</th>
+                  <th scope="col">Pedido</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let foodItem of order.foodItem; index as i">
+                  <td>{{ order.quantity[i] }}</td>
+                  <td>
+                    {{ foodItem.item }}
+                    <ul *ngIf="foodItem.recipe != undefined" class="recipe">
+                      <li>
+                        {{ foodItem.recipe }}
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            *ngIf="order.observation != undefined"
+            class="observation mx-2 mb-3"
+          >
+            <div class="title">Observação do cliente:</div>
+            <div class="body">
+              {{ order.observation }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="orderBtn">
-        <div
-          *ngIf="
-            order.foodOrderStatus == orderStatus[orderStatus.PREPARING];
-            then showCompleteButton;
-            else showButton
-          "
-        ></div>
-        <ng-template #showCompleteButton
-          ><app-button
-            (onClick)="
-              changeOrderStatusFromGivenOrder(
-                order,
-                orderStatus[orderStatus.COMPLETE]
-              )
-            "
-            class="finalizar-btn"
-            btnText="Finalizar"
-          ></app-button
-        ></ng-template>
-        <ng-template #showButton>
+        <div class="orderBtn">
           <div
             *ngIf="
-              order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
-              then showDisabledCompleteButton;
-              else ShowPrepareButton
+              order.foodOrderStatus == orderStatus[orderStatus.PREPARING];
+              then showCompleteButton;
+              else showButton
             "
           ></div>
-          <ng-template #showDisabledCompleteButton
+          <ng-template #showCompleteButton
             ><app-button
               (onClick)="
                 changeOrderStatusFromGivenOrder(
@@ -85,54 +66,84 @@
               "
               class="finalizar-btn"
               btnText="Finalizar"
-              [isBtnDisabled]="true"
             ></app-button
           ></ng-template>
-          <ng-template #ShowPrepareButton>
+          <ng-template #showButton>
+            <div
+              *ngIf="
+                order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
+                then showDisabledCompleteButton;
+                else ShowPrepareButton
+              "
+            ></div>
+            <ng-template #showDisabledCompleteButton
+              ><app-button
+                (onClick)="
+                  changeOrderStatusFromGivenOrder(
+                    order,
+                    orderStatus[orderStatus.COMPLETE]
+                  )
+                "
+                class="finalizar-btn"
+                btnText="Finalizar"
+                [isBtnDisabled]="true"
+              ></app-button
+            ></ng-template>
+            <ng-template #ShowPrepareButton>
+              <app-button
+                (onClick)="
+                  changeOrderStatusFromGivenOrder(
+                    order,
+                    orderStatus[orderStatus.PREPARING]
+                  )
+                "
+                class="preparar-btn"
+                btnText="Preparar"
+              ></app-button
+            ></ng-template>
+          </ng-template>
+
+          <div
+            *ngIf="
+              order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
+              then showRemoveAndDisabledCancelButton;
+              else ShowCancelButton
+            "
+          ></div>
+          <ng-template #showRemoveAndDisabledCancelButton>
+            <app-button
+              (onClick)="removeOrder(order)"
+              class="cancel-btn"
+              btnText="Remover"
+            ></app-button>
+            <app-button
+              class="cancel-btn"
+              btnText="Cancelar"
+              [isBtnDisabled]="true"
+            ></app-button>
+          </ng-template>
+          <ng-template #ShowCancelButton>
             <app-button
               (onClick)="
                 changeOrderStatusFromGivenOrder(
                   order,
-                  orderStatus[orderStatus.PREPARING]
+                  orderStatus[orderStatus.CANCELED]
                 )
               "
-              class="preparar-btn"
-              btnText="Preparar"
+              class="cancel-btn"
+              btnText="Cancelar"
             ></app-button
           ></ng-template>
-        </ng-template>
-
-        <div
-          *ngIf="
-            order.foodOrderStatus == orderStatus[orderStatus.COMPLETE];
-            then showRemoveAndDisabledCancelButton;
-            else ShowCancelButton
-          "
-        ></div>
-        <ng-template #showRemoveAndDisabledCancelButton>
-          <app-button
-            (onClick)="removeOrder(order)"
-            class="cancel-btn"
-            btnText="Remover"
-          ></app-button>
-          <app-button
-            class="cancel-btn"
-            btnText="Cancelar"
-            [isBtnDisabled]="true"
-          ></app-button>
-        </ng-template>
-        <ng-template #ShowCancelButton>
-          <app-button
-            (onClick)="
-              changeOrderStatusFromGivenOrder(
-                order,
-                orderStatus[orderStatus.CANCELED]
-              )
-            "
-            class="cancel-btn"
-            btnText="Cancelar"
-          ></app-button
-        ></ng-template>
-      </div></div
-  ></ng-template>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="flex-auto mt-1 mb-2">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [rows]="10"
+      [totalRecords]="ordersPagination.totalRecords"
+      [rowsPerPageOptions]="[10]"
+    ></p-paginator>
+  </div>
 </div>
