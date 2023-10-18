@@ -13,7 +13,7 @@ const routes: Routes = [
         let orders = inject(OrderService).getOrders();
         return orders.pipe(
           catchError(() => {
-            return of({ error: 'Server failed' });
+            return of({ error: 'The server is not responding.' });
           })
         );
       },
