@@ -46,7 +46,7 @@ ul {
   background-color: var(--sidebar-bg);
   color: #fff;
   width: auto;
-  height: 100vh;
+  height: 80vw;
 }
 
 .mostraSideBar {
