@@ -27,7 +27,10 @@
     </div>
     <div class="item content"><router-outlet></router-outlet></div>
     <div class="item sidenav">
-      <app-sidebar [sidebarOpenClosedInput]="true"></app-sidebar>
+      <app-sidebar
+        [sidebarOpenClosedInput]="true"
+        [sideBarMenuItem]="sidebarMenuitems"
+      ></app-sidebar>
     </div>
   </section>
 </div>

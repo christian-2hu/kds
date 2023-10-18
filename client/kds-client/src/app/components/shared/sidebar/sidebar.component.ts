@@ -14,7 +14,9 @@ import {
   faBurger,
   faGear,
   faBoxArchive,
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
+import { SidebarMenuItem } from 'src/app/models/sidebar-menu-item.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -70,18 +72,16 @@ export class SidebarComponent implements OnInit {
   @Output() hideSidebarEvent: EventEmitter<boolean> =
     new EventEmitter<boolean>();
 
-  @Input() sidebarOpenClosedInput!: boolean;
+  @Input() public sidebarOpenClosedInput!: boolean;
+  @Input({ required: true }) public sideBarMenuItem: SidebarMenuItem[] = [];
   public hideSidebar!: boolean;
   public hideSidebarText!: boolean;
   public hideMenuItem!: boolean;
   public hideIcon!: boolean;
   public state: string = 'closed';
   public barIcon = faBars;
-  public arrowRightIcon = faCaretRight;
+  public arrowRightIcon: IconDefinition = faCaretRight;
   public arrowDownIcon = faCaretDown;
-  public burgerIcon = faBurger;
-  public settingsIcon = faGear;
-  public archiveIcon = faBoxArchive;
   constructor() {}
 
   public ngOnInit(): void {
@@ -89,6 +89,36 @@ export class SidebarComponent implements OnInit {
     this.hideSidebarText = this.sidebarOpenClosedInput;
     this.hideMenuItem = this.sidebarOpenClosedInput;
     this.hideIcon = this.sidebarOpenClosedInput;
+
+    /* this.sideBarMenuItem = [
+      {
+        label: 'Orders',
+        fontAwesomeIcon: this.burgerIcon,
+        routerUrl: '/orders',
+      },
+      {
+        label: 'Archive',
+        fontAwesomeIcon: this.archiveIcon,
+        routerUrl: '/archive',
+      },
+      {
+        label: 'Settings',
+        fontAwesomeIcon: this.settingsIcon,
+        routerUrl: '#',
+        items: [
+          {
+            label: 'User settings',
+            routerUrl: '#',
+          },
+          {
+            label: 'Change password',
+            routerUrl: '#',
+          },
+        ],
+      },
+    ];
+    */
+
     this.hideSidebarEvent.emit(this.hideSidebar);
   }
 
