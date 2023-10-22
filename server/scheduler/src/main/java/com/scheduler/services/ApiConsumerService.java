@@ -1,5 +1,8 @@
 package com.scheduler.services;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -35,8 +38,8 @@ public class ApiConsumerService {
             .block();
     }
 
-    public <T> T[] getContents(String uri, Class<T[]> elementClass) {
-        return webClient()
+    public <T> List<T> getContents(String uri, Class<T[]> elementClass) {
+        T[] contents = webClient()
             .get()
             .uri(uri)
             .headers(header -> header.setBearerAuth(this.bearerToken))
@@ -44,10 +47,11 @@ public class ApiConsumerService {
             .retrieve()
             .bodyToMono(elementClass)
             .block();
+        return contents != null ? Arrays.asList(contents) : null;
     }
 
-    public <T, U> T[] postContent(String uri, U body, Class<T[]> elementClass) {
-        return webClient()
+    public <T, U> List<T> postContent(String uri, U body, Class<T[]> elementClass) {
+        T[] contents = webClient()
             .post()
             .uri(uri)
             .headers(header -> header.setBearerAuth(this.bearerToken))
@@ -57,6 +61,7 @@ public class ApiConsumerService {
             .retrieve()
             .bodyToMono(elementClass)
             .block();
+        return contents != null ? Arrays.asList(contents) : null;
     }
 
     public <T, U> void postContent(String uri) {

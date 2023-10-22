@@ -1,5 +1,6 @@
 package com.scheduler.services.ifood;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +36,7 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     private final OauthTokenRepository oAuthTokenRepository;
 
     @Override
-    public IfoodEventPolling[] getOrders() {
+    public List<IfoodEventPolling> getOrders() {
         checkBearerToken();    
         return apiConsumerService.getContents(merchantApiHost + "/order/v1.0/events:polling", IfoodEventPolling[].class);
     }
