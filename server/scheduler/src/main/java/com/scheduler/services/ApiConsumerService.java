@@ -59,6 +59,16 @@ public class ApiConsumerService {
             .block();
     }
 
+    public <T, U> void postContent(String uri) {
+        webClient()
+            .post()
+            .uri(uri)
+            .headers(header -> header.setBearerAuth(this.bearerToken))
+            .retrieve()
+            .toBodilessEntity()
+            .block();
+    }
+
 
     public void setBearerToken(String token) {
         this.bearerToken = token;
