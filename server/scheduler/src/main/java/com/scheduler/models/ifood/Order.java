@@ -1,4 +1,4 @@
-package com.scheduler.order;
+package com.scheduler.models.ifood;
 
 import java.util.List;
 import java.util.Map;
