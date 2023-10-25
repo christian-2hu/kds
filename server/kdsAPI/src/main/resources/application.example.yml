@@ -6,9 +6,28 @@ spring:
       ddl-auto: update
   datasource:
     username: postgres
-    password: postgres
+    password: Reqz8AMW
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/database
+    url: jdbc:postgresql://localhost:5432/nimosini
     driverClassName: org.postgresql.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
 server:
-  port: 8080
+  port: 8082
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+rabbitmq:
+  queue:
+    name: queueName
+  exchange:
+    name: exchangeName
+  routing-key: routingKey
