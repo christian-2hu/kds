@@ -1,5 +1,7 @@
 package com.kdsAPI.dto.order;
 
+
+import java.util.Date;
 import java.util.List;
 
 import com.kdsAPI.dto.DTO;
@@ -23,12 +25,21 @@ public class OrderDTO extends Order implements DTO<FoodOrder>{
         super(id, fooOrderStatus);
     }
 
-    public OrderDTO(Long id, List<FoodItem> foodItem, List<Integer> quantity, OrderStatus fooOrderStatus) {
-        super(id, foodItem, quantity, fooOrderStatus);
+    public OrderDTO(
+        Long id, 
+        String costumerName, 
+        List<FoodItem> orders, 
+        OrderStatus orderStatus, 
+        String ifoodOrderId, 
+        Date createdAt, 
+        String observation
+    ) {
+        super(id, costumerName, orders, orderStatus, ifoodOrderId, createdAt, observation);
     }
+
 
     @Override
     public FoodOrder convertToDAO() {
-        return new FoodOrder(id, foodItem, quantity, foodOrderStatus);
+        return new FoodOrder(id, costumerName, orders, foodOrderStatus, ifoodOrderId, createdAt, observations);
     }
 }

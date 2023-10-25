@@ -1,5 +1,6 @@
 package com.kdsAPI.models;
 
+import java.util.Date;
 import java.util.List;
 
 import com.kdsAPI.order.Order;
@@ -21,8 +22,17 @@ public class FoodOrder extends Order {
         super(id, fooOrderStatus);
     }
 
-    public FoodOrder(Long id, List<FoodItem> foodItem, List<Integer> quantity, OrderStatus fooOrderStatus) {
-        super(id, foodItem, quantity, fooOrderStatus);
+    public FoodOrder(
+        Long id, 
+        String costumerName, 
+        List<FoodItem> order, 
+        OrderStatus orderStatus, 
+        String ifoodOrderId, 
+        Date createdAt, 
+        String observation
+    ) {
+        super(id, costumerName, order, orderStatus, ifoodOrderId, createdAt, observation);
     }
+
 
 }
