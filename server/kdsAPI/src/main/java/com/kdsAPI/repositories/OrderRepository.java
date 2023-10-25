@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.kdsAPI.models.FoodOrder;
-import com.kdsAPI.order.OrderStatus;
+import com.kdsAPI.models.order.OrderStatus;
 
 public interface OrderRepository extends JpaRepository<FoodOrder, Long>{
    @Query("SELECT foodOrder from FoodOrder foodOrder WHERE foodOrder.foodOrderStatus != OrderStatus.COMPLETE ORDER BY foodOrder.id ASC")
