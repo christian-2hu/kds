@@ -1,4 +1,4 @@
-package com.kdsAPI.models.order;
+package com.kdsAPI.order;
 
 import com.kdsAPI.dto.order.OrderDTO;
 

@@ -1,4 +1,4 @@
-package com.kdsAPI.models.order;
+package com.kdsAPI.order;
 
 import java.util.Date;
 import java.util.List;

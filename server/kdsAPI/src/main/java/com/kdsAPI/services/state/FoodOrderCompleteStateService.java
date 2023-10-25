@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.kdsAPI.models.FoodOrder;
-import com.kdsAPI.models.order.OrderStatus;
+import com.kdsAPI.order.OrderStatus;
 import com.kdsAPI.repositories.OrderRepository;
 
 public class FoodOrderCompleteStateService extends FoodOrderState {
