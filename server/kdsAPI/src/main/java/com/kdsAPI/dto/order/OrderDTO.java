@@ -7,8 +7,8 @@ import java.util.List;
 import com.kdsAPI.dto.DTO;
 import com.kdsAPI.models.FoodItem;
 import com.kdsAPI.models.FoodOrder;
-import com.kdsAPI.order.Order;
-import com.kdsAPI.order.OrderStatus;
+import com.kdsAPI.models.order.Order;
+import com.kdsAPI.models.order.OrderStatus;
 
 import lombok.Getter;
 import lombok.Setter;

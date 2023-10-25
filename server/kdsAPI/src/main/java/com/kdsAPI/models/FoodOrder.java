@@ -3,8 +3,8 @@ package com.kdsAPI.models;
 import java.util.Date;
 import java.util.List;
 
-import com.kdsAPI.order.Order;
-import com.kdsAPI.order.OrderStatus;
+import com.kdsAPI.models.order.Order;
+import com.kdsAPI.models.order.OrderStatus;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
