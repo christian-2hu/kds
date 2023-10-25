@@ -1,25 +1,16 @@
 package com.kdsAPI.models;
 
+import com.kdsAPI.models.foodItem.Item;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class FoodItem {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String unit;
-    private Double quantity;
+@Entity
+public class FoodItem extends Item {
+    public FoodItem(Long id, String name, String unit, Double quantity) {
+        super(id, name, unit, quantity);
+    }
 }
