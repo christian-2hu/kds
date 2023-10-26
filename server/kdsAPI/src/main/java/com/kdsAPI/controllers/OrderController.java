@@ -1,6 +1,5 @@
 package com.kdsAPI.controllers;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kdsAPI.dto.item.ItemDTO;
+import com.kdsAPI.dto.DTO;
 import com.kdsAPI.dto.order.OrderDTO;
-import com.kdsAPI.models.FoodItem;
+import com.kdsAPI.messaging.producers.MessageProducer;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.repositories.OrderRepository;
 import com.kdsAPI.responses.ControllerResponse;
@@ -37,10 +36,10 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
     private final AbstractService<FoodOrder, OrderDTO> storeOrderService;
-    private final AbstractService<FoodItem, ItemDTO> foodItemService;
     private final ControllerResponse<FoodOrder> response;
     private final PaginatedContentResponse<List<FoodOrder>> paginatedContentResponse;
     private FoodOrderState foodOrderState;
+    private final MessageProducer<OrderDTO> OrderMessageProducer;
     private final Integer DEFAULT_PAGE_SIZE = 10;
     
     @GetMapping
@@ -67,13 +66,6 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Response<FoodOrder>> save(@Valid @RequestBody OrderDTO order) {
-        List<FoodItem> items = new LinkedList<>();
-        order.getOrders().forEach((item) -> {
-            ItemDTO itemDTO = new ItemDTO(item.getId(), item.getName(), item.getUnit(), item.getQuantity());
-            FoodItem foodItem = foodItemService.save(itemDTO);
-            items.add(foodItem);
-        });
-        order.setOrders(items);
         FoodOrder saveOrder = storeOrderService.save(order);
         return response.ok(saveOrder);
     }
@@ -88,6 +80,16 @@ public class OrderController {
     public ResponseEntity<Response<FoodOrder>> update(@PathVariable Long id, @Valid @RequestBody OrderDTO order) {
         order.setId(id);
         FoodOrder updatedFoodOrder = storeOrderService.update(order);
+        emmitUpdatedOrderEvent(updatedFoodOrder);
         return response.ok(updatedFoodOrder);
+    }
+    
+    private void emmitUpdatedOrderEvent(FoodOrder order) {
+        if(order.getIfoodOrderId() == null) {
+            return;
+        }
+        DTO<FoodOrder> orderDTO = new OrderDTO();
+        orderDTO = orderDTO.convertToDTO(order); 
+        OrderMessageProducer.sendMessage((OrderDTO)orderDTO, "order.updated");
     }
 }
