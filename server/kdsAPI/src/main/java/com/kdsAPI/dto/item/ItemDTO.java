@@ -14,5 +14,17 @@ public class ItemDTO extends Item implements DTO<FoodItem>{
     public FoodItem convertToDAO() {
         return new FoodItem(id, name, unit, quantity);
     }
+
+    @Override
+    public DTO<FoodItem> convertToDTO(FoodItem dao) {
+        if(dao == null) {
+            throw new NullPointerException("FoodItem dao cannot be null");
+        }
+        this.id = dao.getId();
+        this.name = dao.getName();
+        this.quantity = dao.getQuantity();
+        this.unit = dao.getUnit();
+        return this;
+    }
     
 }

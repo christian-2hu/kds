@@ -42,4 +42,19 @@ public class OrderDTO extends Order implements DTO<FoodOrder>{
     public FoodOrder convertToDAO() {
         return new FoodOrder(id, costumerName, orders, foodOrderStatus, ifoodOrderId, createdAt, observations);
     }
+
+    @Override
+    public DTO<FoodOrder> convertToDTO(FoodOrder dao) {
+        if(dao == null) {
+            throw new NullPointerException("FoodOrder dao cannot be null");
+        }
+        this.id = dao.getId();
+        this.costumerName = dao.getCostumerName();
+        this.orders = dao.getOrders();
+        this.foodOrderStatus = dao.getFoodOrderStatus();
+        this.ifoodOrderId = dao.getIfoodOrderId();
+        this.createdAt = dao.getCreatedAt();
+        this.observations = dao.getObservations();
+        return this;
+    }
 }
