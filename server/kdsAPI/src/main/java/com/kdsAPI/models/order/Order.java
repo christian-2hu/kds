@@ -33,7 +33,6 @@ public abstract class Order {
     @OneToMany
     @JoinColumn(name = "items_id")
     protected List<FoodItem> orders;
-
     protected OrderStatus foodOrderStatus;
     protected String ifoodOrderId;
     protected Date createdAt;
