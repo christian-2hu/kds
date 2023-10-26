@@ -1,5 +1,7 @@
 package com.kdsAPI.services.foodItem;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.kdsAPI.dto.item.ItemDTO;
@@ -14,12 +16,11 @@ public class FoodItemService extends AbstractService<FoodItem, ItemDTO> {
         super(repository);
     }
 
+    // TODO: this is way too ugly, fix this
     @Override
     public FoodItem save(ItemDTO dto) {
         FoodItemRepository repository = (FoodItemRepository)this.repository;
-        return repository.findByName(dto.getName())
-            .orElse(
-                repository.save(dto.convertToDAO())
-            );
+        List<FoodItem> foundItems = repository.findByName(dto.getName());
+        return foundItems.size() == 0 ? repository.save(dto.convertToDAO()) : foundItems.get(0);
     }
 }
