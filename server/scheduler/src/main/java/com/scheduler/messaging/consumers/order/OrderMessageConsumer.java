@@ -13,7 +13,7 @@ import com.scheduler.models.ifood.Order;
 public class OrderMessageConsumer implements MessageConsumer<Order> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(OrderMessageConsumer.class);
 
-    @RabbitListener(queues = {"${rabbitmq.queue.name}"})
+    @RabbitListener(queues = {"${rabbitmq.queue.order.updated.name}"})
     @Override
     public void getMessage(Order message){
         LOGGER.info(String.format("Received message -> %s", message.toString()));

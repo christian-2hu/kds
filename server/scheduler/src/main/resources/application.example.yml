@@ -22,7 +22,11 @@ spring:
 
 rabbitmq:
   queue:
-    name: queueName
+    order:
+      updated:
+        name: updatedOrderQueue
+      created:
+        name: createdOrderQueue
   exchange:
     name: exchangeName
   routing-key: routingKey

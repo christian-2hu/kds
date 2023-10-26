@@ -18,7 +18,7 @@ public abstract class MessageProducer<T> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(MessageProducer.class);
     protected final RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(T message) {
+    public void sendMessage(T message, String routingKey) {
         LOGGER.info(String.format("Message sent -> %s", message.toString()));
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }

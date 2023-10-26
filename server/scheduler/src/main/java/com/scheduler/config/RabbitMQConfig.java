@@ -17,8 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.queue.name}")
-    private String queue;
+    @Value("${rabbitmq.queue.order.updated.name}")
+    private String updatedQueueName;
+
+    @Value("${rabbitmq.queue.order.created.name}")
+    private String createdQueueName;
 
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
@@ -26,9 +29,16 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routing-key}")
     private String routingKey;
 
+
     @Bean
-    public Queue queue(){
-        return new Queue(queue);
+    public Queue updatedOrderQueue() {
+        return new Queue(updatedQueueName, true);
+    }
+
+    @Bean
+    public Queue createdOrderQueue() {
+        return new Queue(createdQueueName, true);
+
     }
 
     @Bean
@@ -37,11 +47,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding(){
-        return BindingBuilder
-                .bind(queue())
-                .to(exchange())
-                .with(routingKey);
+    public Binding updatedOrderBinding(Queue updatedOrderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(updatedOrderQueue).to(exchange).with("order.updated");
+    }
+
+    @Bean
+    public Binding createdOrderBinding(Queue createdOrderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(createdOrderQueue).to(exchange).with("order.created");
     }
 
     @Bean
