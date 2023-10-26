@@ -7,12 +7,14 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @MappedSuperclass
 @AllArgsConstructor
+@NoArgsConstructor
 public abstract class Item {
 
     @Id
@@ -23,6 +25,5 @@ public abstract class Item {
     protected String unit;
     @NotNull(message = "\"This field cannot be empty\"")
     protected Double quantity;
-
 
 }

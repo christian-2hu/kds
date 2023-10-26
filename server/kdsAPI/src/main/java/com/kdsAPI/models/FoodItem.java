@@ -10,6 +10,10 @@ import lombok.Setter;
 @Setter
 @Entity
 public class FoodItem extends Item {
+    public FoodItem() {
+        super();
+    }
+
     public FoodItem(Long id, String name, String unit, Double quantity) {
         super(id, name, unit, quantity);
     }

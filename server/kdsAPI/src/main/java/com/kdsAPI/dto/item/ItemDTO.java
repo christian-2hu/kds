@@ -10,6 +10,10 @@ public class ItemDTO extends Item implements DTO<FoodItem>{
         super(id, name, unit, quantity);
     }
 
+    public ItemDTO() {
+        super();
+    }
+
     @Override
     public FoodItem convertToDAO() {
         return new FoodItem(id, name, unit, quantity);
