@@ -16,7 +16,7 @@ import lombok.ToString;
 public class IfoodEventPolling {
     private String id;
     private String code;
-    private String fullCode;
+    private IfoodOrderCode fullCode;
     private String orderId;
     private String merchantId;
     private Date createdAt;

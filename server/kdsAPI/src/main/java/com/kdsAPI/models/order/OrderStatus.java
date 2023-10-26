@@ -1,4 +1,4 @@
-package com.kdsAPI.order;
+package com.kdsAPI.models.order;
 
 public enum OrderStatus {
     WAITING,

@@ -1,32 +1,34 @@
 package com.kdsAPI.dto.item;
 
 import com.kdsAPI.dto.DTO;
-import com.kdsAPI.item.Item;
 import com.kdsAPI.models.FoodItem;
+import com.kdsAPI.models.foodItem.Item;
 
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public class ItemDTO extends Item implements DTO<FoodItem>{
 
-@Data
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemDTO implements DTO<FoodItem>, Item {
-    private final String notEmptyMessage = "This field cannot be empty";
+    public ItemDTO(Long id, String name, String unit, Double quantity) {
+        super(id, name, unit, quantity);
+    }
 
-    private Long id;
-    @NotEmpty(message = notEmptyMessage)
-    private String item;
-    private String recipe;
+    public ItemDTO() {
+        super();
+    }
 
     @Override
     public FoodItem convertToDAO() {
-        return new FoodItem(id, item, recipe);
+        return new FoodItem(id, name, unit, quantity);
     }
 
+    @Override
+    public DTO<FoodItem> convertToDTO(FoodItem dao) {
+        if(dao == null) {
+            throw new NullPointerException("FoodItem dao cannot be null");
+        }
+        this.id = dao.getId();
+        this.name = dao.getName();
+        this.quantity = dao.getQuantity();
+        this.unit = dao.getUnit();
+        return this;
+    }
+    
 }

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kdsAPI.dto.DTO;
 import com.kdsAPI.dto.order.OrderDTO;
+import com.kdsAPI.messaging.producers.MessageProducer;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.repositories.OrderRepository;
 import com.kdsAPI.responses.ControllerResponse;
@@ -37,8 +39,9 @@ public class OrderController {
     private final ControllerResponse<FoodOrder> response;
     private final PaginatedContentResponse<List<FoodOrder>> paginatedContentResponse;
     private FoodOrderState foodOrderState;
-    private final Integer DEFAULT_PAGE_SIZE = 12;
-
+    private final MessageProducer<OrderDTO> OrderMessageProducer;
+    private final Integer DEFAULT_PAGE_SIZE = 10;
+    
     @GetMapping
     public PaginatedContentResponse<List<FoodOrder>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer pageNumber) {
         foodOrderState = new FoodOrderWaitingStateService((OrderRepository)storeOrderService.getRepository());
@@ -77,6 +80,16 @@ public class OrderController {
     public ResponseEntity<Response<FoodOrder>> update(@PathVariable Long id, @Valid @RequestBody OrderDTO order) {
         order.setId(id);
         FoodOrder updatedFoodOrder = storeOrderService.update(order);
+        emmitUpdatedOrderEvent(updatedFoodOrder);
         return response.ok(updatedFoodOrder);
+    }
+    
+    private void emmitUpdatedOrderEvent(FoodOrder order) {
+        if(order.getIfoodOrderId() == null) {
+            return;
+        }
+        DTO<FoodOrder> orderDTO = new OrderDTO();
+        orderDTO = orderDTO.convertToDTO(order); 
+        OrderMessageProducer.sendMessage((OrderDTO)orderDTO, "order.updated");
     }
 }
