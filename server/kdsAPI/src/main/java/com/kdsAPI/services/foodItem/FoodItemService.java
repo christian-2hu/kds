@@ -16,6 +16,10 @@ public class FoodItemService extends AbstractService<FoodItem, ItemDTO> {
 
     @Override
     public FoodItem save(ItemDTO dto) {
-        return repository.save(dto.convertToDAO());
+        FoodItemRepository repository = (FoodItemRepository)this.repository;
+        return repository.findByName(dto.getName())
+            .orElse(
+                repository.save(dto.convertToDAO())
+            );
     }
 }
