@@ -1,5 +1,6 @@
 package com.scheduler.services.ifood;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +11,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.scheduler.models.ifood.IfoodEventPolling;
+import com.scheduler.models.ifood.IfoodOrderCode;
+import com.scheduler.models.ifood.IfoodOrderStatus;
 import com.scheduler.models.ifood.OauthToken;
+import com.scheduler.models.ifood.Order;
+import com.scheduler.models.ifood.OrderStatus;
+import com.scheduler.models.ifood.metadata.item.Item;
 import com.scheduler.repositories.OauthTokenRepository;
 import com.scheduler.request.EventAcknowledgmentRequest;
 import com.scheduler.services.ApiConsumerService;
@@ -42,6 +48,13 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     }
 
     @Override
+    public <C> C getOrder(String orderId, Class<C> elementClass) {
+        checkBearerToken();
+        String orderDetailsEndpoint = String.format("%s/order/v1.0/orders/%s", merchantApiHost, orderId);
+        return apiConsumerService.getContent(orderDetailsEndpoint, elementClass);
+    }
+
+    @Override
     public void confirmOrder(String orderId) {
         String confirmOrderEndpoint = String.format("%s/order/v1.0/orders/%s/confirm", merchantApiHost, orderId);
         apiConsumerService.postContent(confirmOrderEndpoint);
@@ -65,6 +78,44 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
         EventAcknowledgmentRequest eventAcknowledgmentRequest = new EventAcknowledgmentRequest(orderId);
         EventAcknowledgmentRequest[] eventAcknowledgments = {eventAcknowledgmentRequest};
         apiConsumerService.postContent(merchantApiHost + "/order/v1.0/events/acknowledgment", eventAcknowledgments, Object[].class);
+    }
+
+    @Override
+    public <D extends IfoodOrderStatus> Order convertToOrder(D deliveryOrder) {
+        List<Item> items = Arrays.asList(deliveryOrder.getItems());
+        OrderStatus orderStatus = convertIfoodOrderCodeToOrderStatus(deliveryOrder.getFullCode());
+        String costumerName = deliveryOrder.getCostumer() != null ? deliveryOrder.getCostumer().getName() : "Uknown";
+        return new Order(
+            null, 
+            costumerName,
+            items,
+            orderStatus,
+            deliveryOrder.getId(),
+            deliveryOrder.getCreatedAt(),
+            deliveryOrder.getDelivery().getObservations(),
+            deliveryOrder.getDelivery().getDeliveryAddress()
+            );
+    }
+
+    private OrderStatus convertIfoodOrderCodeToOrderStatus(IfoodOrderCode ifoodOrderStatus) {
+        switch(ifoodOrderStatus) {
+            case CANCELLED:
+                 return OrderStatus.CANCELED;
+            case CONCLUDED:
+                return OrderStatus.COMPLETE;
+            case CONFIRMED:
+                return OrderStatus.COMPLETE;
+            case DISPATCHED:
+                return OrderStatus.COMPLETE;
+            case PLACED:
+                return OrderStatus.WAITING;
+            case READY_TO_PICKUP:
+                return OrderStatus.COMPLETE;
+            case PREPARATION_STARTED:
+                return OrderStatus.PREPARING;
+            default:
+                throw new RuntimeException("No such status");
+        }
     }
 
     private void checkBearerToken() {
@@ -104,5 +155,4 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
         }
         return false;
     }
-
 }
