@@ -104,7 +104,7 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
             case CONCLUDED:
                 return OrderStatus.COMPLETE;
             case CONFIRMED:
-                return OrderStatus.COMPLETE;
+                return OrderStatus.CONFIRMED;
             case DISPATCHED:
                 return OrderStatus.COMPLETE;
             case PLACED:
