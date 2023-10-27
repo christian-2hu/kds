@@ -18,6 +18,7 @@ import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.messaging.producers.MessageProducer;
 import com.kdsAPI.messaging.producers.order.OrderEvent;
 import com.kdsAPI.models.FoodOrder;
+import com.kdsAPI.models.order.OrderStatus;
 import com.kdsAPI.repositories.OrderRepository;
 import com.kdsAPI.responses.ControllerResponse;
 import com.kdsAPI.responses.PaginatedContentResponse;
@@ -85,7 +86,7 @@ public class OrderController {
     }
     
     private void emmitUpdatedOrderEvent(FoodOrder order) {
-        if(order.getIfoodOrderId() == null) {
+        if(order.getIfoodOrderId() == null || order.getFoodOrderStatus() == OrderStatus.WAITING) {
             return;
         }
         OrderEvent orderEvent = new OrderEvent(order.getIfoodOrderId(), order.getFoodOrderStatus());
