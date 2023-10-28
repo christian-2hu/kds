@@ -35,19 +35,19 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   @Override
-  public void emmitOrderEvent(Order order) {
-    orderMessageProducer.sendMessage(order, "order.created");
+  public void emmitOrderEvent(Order order, String routingKey) {
+    orderMessageProducer.sendMessage(order, routingKey);
   }
 
   private void emmitOrders(List<IfoodEventPolling> orders) {
     orders.forEach((order) -> {
-      // TODO: emmit IfoodOrderCode.CANCELED as well, the client and the ifood can cancel an order
+// TODO: emmit IfoodOrderCode.CANCELED as well, the client and the ifood can cancel an order
       if(order.getFullCode() != IfoodOrderCode.PLACED) {
         return;
       }
       IfoodOrderStatus ifoodOrder = getIfoodOrderFromPolling(order);
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
-      emmitOrderEvent(orderToEmmit);
+      emmitOrderEvent(orderToEmmit, "order.created");
       acknowledgeOrder(order);
     });
   } 
