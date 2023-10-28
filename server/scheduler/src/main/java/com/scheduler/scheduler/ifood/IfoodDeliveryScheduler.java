@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.scheduler.messaging.producers.order.OrderMessageProducer;
 import com.scheduler.models.ifood.IfoodEventPolling;
-import com.scheduler.models.ifood.IfoodOrderCode;
 import com.scheduler.models.ifood.IfoodOrderStatus;
 import com.scheduler.models.ifood.Order;
 import com.scheduler.scheduler.DeliveryScheduler;
@@ -31,7 +30,7 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
       return;
     }
     LOGGER.info(String.format("%s orders were found on the polling", orders.size()));
-    emmitOrders(orders);
+    emmitOrder(orders);
   }
 
   @Override
@@ -39,14 +38,18 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
     orderMessageProducer.sendMessage(order, routingKey);
   }
 
-  private void emmitOrders(List<IfoodEventPolling> orders) {
+  private void emmitOrder(List<IfoodEventPolling> orders) {
     orders.forEach((order) -> {
-// TODO: emmit IfoodOrderCode.CANCELED as well, the client and the ifood can cancel an order
-      if(order.getFullCode() != IfoodOrderCode.PLACED) {
-        return;
-      }
       IfoodOrderStatus ifoodOrder = getIfoodOrderFromPolling(order);
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
+      switch (order.getFullCode()) {
+        case PLACED:
+          emmitOrderEvent(orderToEmmit, "order.created");
+          break;
+        default:
+          emmitOrderEvent(orderToEmmit, "order.updated");
+          break;
+      }
       emmitOrderEvent(orderToEmmit, "order.created");
       acknowledgeOrder(order);
     });
