@@ -44,7 +44,7 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     @Override
     public List<IfoodEventPolling> getOrders() {
         checkBearerToken();    
-        return apiConsumerService.getContents(merchantApiHost + "/order/v1.0/events:polling?types=PLC,CAN", IfoodEventPolling[].class);
+        return apiConsumerService.getContents(merchantApiHost + "/order/v1.0/events:polling", IfoodEventPolling[].class);
     }
 
     @Override

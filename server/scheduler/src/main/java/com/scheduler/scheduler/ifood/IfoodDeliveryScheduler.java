@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.scheduler.messaging.producers.order.OrderMessageProducer;
 import com.scheduler.models.ifood.IfoodEventPolling;
+import com.scheduler.models.ifood.IfoodOrderCode;
 import com.scheduler.models.ifood.IfoodOrderStatus;
 import com.scheduler.models.ifood.Order;
 import com.scheduler.scheduler.DeliveryScheduler;
@@ -40,6 +41,10 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
 
   private void emmitOrders(List<IfoodEventPolling> orders) {
     orders.forEach((order) -> {
+      // TODO: emmit IfoodOrderCode.CANCELED as well, the client and the ifood can cancel an order
+      if(order.getFullCode() != IfoodOrderCode.PLACED) {
+        return;
+      }
       IfoodOrderStatus ifoodOrder = getIfoodOrderFromPolling(order);
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
       emmitOrderEvent(orderToEmmit);
