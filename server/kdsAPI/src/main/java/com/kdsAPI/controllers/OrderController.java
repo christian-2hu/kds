@@ -40,7 +40,7 @@ public class OrderController {
     private final ControllerResponse<FoodOrder> response;
     private final PaginatedContentResponse<List<FoodOrder>> paginatedContentResponse;
     private FoodOrderState foodOrderState;
-    private final MessageProducer<OrderEvent> OrderMessageProducer;
+    private final MessageProducer<OrderEvent> orderMessageProducer;
     private final Integer DEFAULT_PAGE_SIZE = 10;
     
     @GetMapping
@@ -90,6 +90,6 @@ public class OrderController {
             return;
         }
         OrderEvent orderEvent = new OrderEvent(order.getIfoodOrderId(), order.getFoodOrderStatus());
-        OrderMessageProducer.sendMessage(orderEvent, "order.updated");
+        orderMessageProducer.sendMessage(orderEvent, "order.updated");
     }
 }
