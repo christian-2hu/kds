@@ -24,10 +24,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let foodItem of order.foodItem; index as i">
-                  <td>{{ order.quantity[i] }}</td>
+                <tr *ngFor="let foodItem of order.orders; index as i">
+                  <td>{{ foodItem.quantity }}</td>
                   <td>
-                    {{ foodItem.item }}
+                    {{ foodItem.name }}
                     <ul *ngIf="foodItem.recipe != undefined" class="recipe">
                       <li>
                         {{ foodItem.recipe }}

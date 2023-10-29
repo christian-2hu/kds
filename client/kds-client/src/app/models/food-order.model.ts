@@ -3,8 +3,10 @@ import { OrderStatus } from './food-order-status.model';
 
 export interface FoodOrder {
   id?: number;
-  foodItem: FoodItem[];
-  quantity: number[];
+  costumerName: string;
+  orders: FoodItem[];
   foodOrderStatus: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED';
+  ifoodOrderId: string;
+  createdAt: Date;
   observation?: string;
 }

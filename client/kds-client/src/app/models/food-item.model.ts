@@ -1,5 +1,7 @@
 export interface FoodItem {
   id?: number;
-  item: string;
+  name: string;
+  unit: string;
+  quantity: number;
   recipe?: string;
 }
