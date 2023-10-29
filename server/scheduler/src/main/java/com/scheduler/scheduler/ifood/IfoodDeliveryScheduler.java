@@ -50,7 +50,6 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
           emmitOrderEvent(orderToEmmit, "order.updated");
           break;
       }
-      emmitOrderEvent(orderToEmmit, "order.created");
       acknowledgeOrder(order);
     });
   } 
