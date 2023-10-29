@@ -10,8 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public abstract class Order {
     protected String costumerName;
     @NotNull(message = "\"This field cannot be empty\"")
     @Column(name="foodOrder")
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "items_id")
     protected List<FoodItem> orders;
     protected OrderStatus foodOrderStatus;
