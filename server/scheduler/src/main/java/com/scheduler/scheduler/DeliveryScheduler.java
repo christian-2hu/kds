@@ -8,6 +8,6 @@ public abstract class DeliveryScheduler {
     protected final Logger LOGGER = Logger.getLogger(DeliveryScheduler.class.getName());
   
     public abstract void fetchOrders() throws InterruptedException;
-    public abstract void emmitOrderEvent(Order order);
+    public abstract void emmitOrderEvent(Order order, String routingKey);
 
 }

@@ -18,13 +18,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderMessageConsumer implements MessageConsumer<OrderDTO> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(OrderMessageConsumer.class);
-    private final AbstractService<FoodOrder, OrderDTO> storeOrderService;
+    private final AbstractService<FoodOrder, OrderDTO> ifoodOrderService;
 
     @RabbitListener(queues = {"${rabbitmq.queue.order.created.name}"})
     @Override
     public void getMessage(OrderDTO message){
         LOGGER.info(String.format("Received message -> %s", message.toString()));
-        FoodOrder order = storeOrderService.save(message);
+        FoodOrder order = ifoodOrderService.save(message);
         LOGGER.info(String.format("Order got from event was saved with id %s!", order.getId()));
     }
+    // TODO: consume the queue.order.updated and update it using the ifoodOrderService
 }

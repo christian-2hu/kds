@@ -44,7 +44,7 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     @Override
     public List<IfoodEventPolling> getOrders() {
         checkBearerToken();    
-        return apiConsumerService.getContents(merchantApiHost + "/order/v1.0/events:polling", IfoodEventPolling[].class);
+        return apiConsumerService.getContents(merchantApiHost + "/order/v1.0/events:polling?types=PLC,CAN", IfoodEventPolling[].class);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
             case CONCLUDED:
                 return OrderStatus.COMPLETE;
             case CONFIRMED:
-                return OrderStatus.COMPLETE;
+                return OrderStatus.CONFIRMED;
             case DISPATCHED:
                 return OrderStatus.COMPLETE;
             case PLACED:
