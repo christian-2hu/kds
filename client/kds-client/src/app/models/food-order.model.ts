@@ -6,7 +6,7 @@ export interface FoodOrder {
   costumerName: string;
   orders: FoodItem[];
   foodOrderStatus: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED';
-  ifoodOrderId: string;
+  ifoodOrderId?: string;
   createdAt: Date;
   observations?: string;
 }
