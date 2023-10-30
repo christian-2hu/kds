@@ -8,5 +8,5 @@ export interface FoodOrder {
   foodOrderStatus: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED';
   ifoodOrderId: string;
   createdAt: Date;
-  observation?: string;
+  observations?: string;
 }
