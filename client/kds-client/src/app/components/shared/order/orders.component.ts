@@ -22,39 +22,28 @@ export class OrdersComponent {
 
   constructor(private orderService: OrderService, private router: Router) {}
 
-  public async changeOrderStatusFromGivenOrder(
+  public async onChangeOrderStatus(
     order: FoodOrder,
-    orderStatus: unknown
+    optionalOrderStatus?: OrderStatus
   ) {
-    const orderStatusLiteral = this.getStringLiteralFromUnkown(orderStatus);
-    if (orderStatusLiteral == 'COMPLETE') {
+    if (order.foodOrderStatus == 'COMPLETE') {
       const userInput = this.warnUserAboutCompletingOrder(order);
-
       if ((await userInput).isDenied || (await userInput).isDismissed) {
         return;
       }
     }
+    let orderStatus = this.getOrderStatusFromStringLiteral(
+      order.foodOrderStatus
+    );
+    let orderStatusToLiteral =
+      optionalOrderStatus != undefined
+        ? optionalOrderStatus
+        : this.changeOrderStatus(orderStatus);
 
-    order.foodOrderStatus = orderStatusLiteral;
-    this.orderService.updateOrder(order).subscribe({
-      next: (response) => {
-        let updatedOrder: FoodOrder = response.data as FoodOrder;
-        switch (updatedOrder.foodOrderStatus) {
-          case 'COMPLETE':
-            this.deleteOrderFromArray(order);
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `Pedido #${updatedOrder.id} foi finalizado!`,
-              text: 'O pedido foi removido desta página, você pode vê-lo novamente no arquivo.',
-              showConfirmButton: true,
-              timer: 3500,
-            });
-            break;
-        }
-      },
-      error: (error) => console.log(error),
-    });
+    order.foodOrderStatus = this.getStringLiteralFromUnkown(
+      OrderStatus[orderStatusToLiteral]
+    );
+    this.updateOrder(order);
   }
 
   public removeOrder(order: FoodOrder) {
@@ -90,12 +79,63 @@ export class OrdersComponent {
     });
   }
 
+  public changeOrderStatus(orderStatus: OrderStatus) {
+    switch (orderStatus) {
+      case OrderStatus.WAITING:
+        return OrderStatus.PREPARING;
+      case OrderStatus.PREPARING:
+        return OrderStatus.COMPLETE;
+      default:
+        return OrderStatus.WAITING;
+    }
+  }
+
+  public getOrderStatusFromStringLiteral(
+    literal: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED'
+  ) {
+    switch (literal) {
+      case 'WAITING':
+        return OrderStatus.WAITING;
+      case 'PREPARING':
+        return OrderStatus.PREPARING;
+      case 'COMPLETE':
+        return OrderStatus.COMPLETE;
+      case 'CANCELED':
+        return OrderStatus.CANCELED;
+      default:
+        throw new Error('Could not get literal');
+    }
+  }
+
   // TODO: The array is ordered, a binary search can be done
   private deleteOrderFromArray(order: FoodOrder) {
     this.foodOrders.forEach((item, i) => {
       if (item == order) {
         this.foodOrders.splice(i, 1);
       }
+    });
+  }
+
+  private updateOrder(order: FoodOrder) {
+    this.orderService.updateOrder(order).subscribe({
+      next: (response) => {
+        let updatedOrder: FoodOrder = response.data as FoodOrder;
+        console.log(updatedOrder);
+        switch (updatedOrder.foodOrderStatus) {
+          case 'COMPLETE':
+            this.deleteOrderFromArray(order);
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: `Pedido #${updatedOrder.id} foi finalizado!`,
+              text: 'O pedido foi removido desta página, você pode vê-lo novamente no arquivo.',
+              showConfirmButton: true,
+              timer: 3500,
+            });
+            break;
+        }
+      },
+      error: (error) => console.log(error),
     });
   }
 

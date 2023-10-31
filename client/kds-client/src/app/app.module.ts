@@ -9,6 +9,7 @@ import { OrderInfoComponent } from './components/shared/order-info/order-info.co
 import { ButtonComponent } from './components/shared/button/button.component';
 import { OrderComponent } from './components/order/order.component';
 import { SidebarComponent } from './components/shared/sidebar/sidebar.component';
+import { OrderBtnComponent } from './components/shared/order/order-btn/order-btn.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserInfoComponent } from './components/shared/sidebar/user-info/user-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -25,6 +26,7 @@ import { PaginatorModule } from 'primeng/paginator';
     OrderComponent,
     SidebarComponent,
     UserInfoComponent,
+    OrderBtnComponent,
   ],
   imports: [
     BrowserModule,
