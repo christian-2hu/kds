@@ -18,8 +18,7 @@ export class OrderBtnComponent {
   }
 
   public changeOrderStatusTo(orderStatus: OrderStatus) {
-    this.orderStatus = orderStatus;
-    this.orderStatusChangeEvent.emit(this.orderStatus);
+    this.orderStatusChangeEvent.emit(orderStatus);
   }
 
   public get getOrderStatus(): typeof OrderStatus {

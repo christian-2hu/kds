@@ -29,8 +29,15 @@ export class OrdersComponent {
     let orderStatus = this.getOrderStatusFromStringLiteral(
       order.foodOrderStatus
     );
-    if (this.getNextOrderStatus(orderStatus) == OrderStatus.COMPLETE) {
-      const userInput = this.warnUserAboutUpdatingOrder(order);
+    let nextStatus =
+      optionalOrderStatus != undefined
+        ? optionalOrderStatus
+        : this.getNextOrderStatus(orderStatus);
+    if (
+      nextStatus == OrderStatus.COMPLETE ||
+      nextStatus == OrderStatus.CANCELED
+    ) {
+      const userInput = this.warnUserAboutUpdatingOrder(order, nextStatus);
       if ((await userInput).isDenied || (await userInput).isDismissed) {
         return;
       }
@@ -138,10 +145,13 @@ export class OrdersComponent {
     });
   }
 
-  private async warnUserAboutUpdatingOrder(order: FoodOrder) {
+  private async warnUserAboutUpdatingOrder(
+    order: FoodOrder,
+    nextStatus: OrderStatus
+  ) {
     const userInput = await Swal.fire({
-      title: `Atualizar pedido ${order.id}?`,
-      text: `Você está atualizando o pedido ${order.id}, está ação não é reversível e você não poderá mais interagir com esse pedido.`,
+      title: `Atualizar pedido ${order.id} para ${OrderStatus[nextStatus]}?`,
+      text: `Você está atualizando o pedido ${order.id} para ${OrderStatus[nextStatus]}, esta ação não é reversível e você não poderá mais interagir com esse pedido.`,
       showDenyButton: true,
       confirmButtonText: 'Atualizar',
       denyButtonText: `Não atualizar`,
