@@ -22,7 +22,7 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Long>{
         AND 
             foodOrder.foodOrderStatus != OrderStatus.CANCELED 
         ORDER BY 
-            foodOrder.id DESC
+            foodOrder.id ASC
     """
     )
     public Page<FoodOrder> findAll(Pageable pageable);
