@@ -6,6 +6,8 @@ import java.util.List;
 import com.kdsAPI.models.FoodItem;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,14 +29,17 @@ public abstract class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @NotNull(message = "\"This field cannot be empty\"")
     protected String costumerName;
     @NotNull(message = "\"This field cannot be empty\"")
     @Column(name="foodOrder")
     @ManyToMany
     @JoinColumn(name = "items_id")
     protected List<FoodItem> orders;
+    @Enumerated(EnumType.STRING)
     protected OrderStatus foodOrderStatus;
     protected String ifoodOrderId;
+    @NotNull(message = "\"This field cannot be empty\"")
     protected Date createdAt;
     protected String observations;
 
