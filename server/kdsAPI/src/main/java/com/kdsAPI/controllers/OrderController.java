@@ -71,6 +71,19 @@ public class OrderController {
         return response.ok(saveOrder);
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Response<FoodOrder>> confirmOrder(@PathVariable Long id) {
+        FoodOrder order = storeOrderService.getById(id);
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.convertToDTO(order);
+        orderDTO.setFoodOrderStatus(OrderStatus.CONFIRMED);
+        FoodOrder updatedOrder = storeOrderService.update(orderDTO);
+        if(updatedOrder.getIfoodOrderId() != null) {
+            emmitUpdatedOrderEvent(updatedOrder);
+        }
+        return response.ok(updatedOrder);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<FoodOrder>> delete(@PathVariable Long id) {
         storeOrderService.deleteById(id);
