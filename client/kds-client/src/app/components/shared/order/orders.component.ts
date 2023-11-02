@@ -26,20 +26,20 @@ export class OrdersComponent {
     order: FoodOrder,
     optionalOrderStatus?: OrderStatus
   ) {
-    if (order.foodOrderStatus == 'COMPLETE') {
-      const userInput = this.warnUserAboutCompletingOrder(order);
+    let orderStatus = this.getOrderStatusFromStringLiteral(
+      order.foodOrderStatus
+    );
+    if (this.getNextOrderStatus(orderStatus) == OrderStatus.COMPLETE) {
+      const userInput = this.warnUserAboutUpdatingOrder(order);
       if ((await userInput).isDenied || (await userInput).isDismissed) {
         return;
       }
     }
-    let orderStatus = this.getOrderStatusFromStringLiteral(
-      order.foodOrderStatus
-    );
+
     let orderStatusToLiteral =
       optionalOrderStatus != undefined
         ? optionalOrderStatus
-        : this.changeOrderStatus(orderStatus);
-
+        : this.getNextOrderStatus(orderStatus);
     order.foodOrderStatus = this.getStringLiteralFromUnkown(
       OrderStatus[orderStatusToLiteral]
     );
@@ -79,14 +79,14 @@ export class OrdersComponent {
     });
   }
 
-  public changeOrderStatus(orderStatus: OrderStatus) {
+  public getNextOrderStatus(orderStatus: OrderStatus) {
     switch (orderStatus) {
       case OrderStatus.WAITING:
         return OrderStatus.PREPARING;
       case OrderStatus.PREPARING:
         return OrderStatus.COMPLETE;
       default:
-        return OrderStatus.WAITING;
+        return OrderStatus.CANCELED;
     }
   }
 
@@ -103,7 +103,7 @@ export class OrdersComponent {
       case 'CANCELED':
         return OrderStatus.CANCELED;
       default:
-        throw new Error('Could not get literal');
+        throw new Error('Could not get literal: ' + literal);
     }
   }
 
@@ -120,7 +120,6 @@ export class OrdersComponent {
     this.orderService.updateOrder(order).subscribe({
       next: (response) => {
         let updatedOrder: FoodOrder = response.data as FoodOrder;
-        console.log(updatedOrder);
         switch (updatedOrder.foodOrderStatus) {
           case 'COMPLETE':
             this.deleteOrderFromArray(order);
@@ -139,13 +138,13 @@ export class OrdersComponent {
     });
   }
 
-  private async warnUserAboutCompletingOrder(order: FoodOrder) {
+  private async warnUserAboutUpdatingOrder(order: FoodOrder) {
     const userInput = await Swal.fire({
-      title: `Finalizar pedido ${order.id}?`,
-      text: `Você está finzalidando o pedido ${order.id}, está ação não é reversível e você não poderá mais interagir com esse pedido.`,
+      title: `Atualizar pedido ${order.id}?`,
+      text: `Você está atualizando o pedido ${order.id}, está ação não é reversível e você não poderá mais interagir com esse pedido.`,
       showDenyButton: true,
-      confirmButtonText: 'Finalizar',
-      denyButtonText: `Não finalizar`,
+      confirmButtonText: 'Atualizar',
+      denyButtonText: `Não atualizar`,
     });
     return userInput;
   }
