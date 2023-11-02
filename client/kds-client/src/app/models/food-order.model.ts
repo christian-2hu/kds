@@ -5,7 +5,12 @@ export interface FoodOrder {
   id?: number;
   costumerName: string;
   orders: FoodItem[];
-  foodOrderStatus: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED';
+  foodOrderStatus:
+    | 'WAITING'
+    | 'PREPARING'
+    | 'COMPLETE'
+    | 'CANCELED'
+    | 'CONFIRMED';
   ifoodOrderId?: string;
   createdAt: Date;
   observations?: string;

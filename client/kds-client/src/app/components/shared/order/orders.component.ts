@@ -98,11 +98,13 @@ export class OrdersComponent {
   }
 
   public getOrderStatusFromStringLiteral(
-    literal: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED'
+    literal: 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED' | 'CONFIRMED'
   ) {
     switch (literal) {
       case 'WAITING':
         return OrderStatus.WAITING;
+      case 'CONFIRMED':
+        return OrderStatus.CONFIRMED;
       case 'PREPARING':
         return OrderStatus.PREPARING;
       case 'COMPLETE':
@@ -161,10 +163,12 @@ export class OrdersComponent {
 
   private getStringLiteralFromUnkown(
     literal: unknown
-  ): 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED' {
+  ): 'WAITING' | 'PREPARING' | 'COMPLETE' | 'CANCELED' | 'CONFIRMED' {
     switch (literal) {
       case 'WAITING':
         return 'WAITING';
+      case 'CONFIRMED':
+        return 'CONFIRMED';
       case 'PREPARING':
         return 'PREPARING';
       case 'COMPLETE':
