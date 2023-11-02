@@ -4,6 +4,7 @@
       <div class="order">
         <div
           [ngClass]="{
+            'confirmado-color': order.foodOrderStatus == orderStatus[orderStatus.CONFIRMED],
             'preparando-color': order.foodOrderStatus == orderStatus[orderStatus.PREPARING],
             'aguardando-color': order.foodOrderStatus == orderStatus[orderStatus.WAITING],
             'pronto-color': order.foodOrderStatus == orderStatus[orderStatus.COMPLETE],
