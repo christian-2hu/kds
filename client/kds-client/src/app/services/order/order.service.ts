@@ -37,6 +37,13 @@ export class OrderService {
     );
   }
 
+  public confirmOrder(id: number) {
+    return this.http.post<Response<FoodOrder>>(
+      `${Environment.api}/order/${id}`,
+      null
+    );
+  }
+
   public deleteOrder(order: FoodOrder) {
     const id = order.id;
     return this.http.delete<Response<FoodOrder>>(

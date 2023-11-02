@@ -43,14 +43,14 @@ export class OrdersComponent {
       }
     }
 
-    let orderStatusToLiteral =
-      optionalOrderStatus != undefined
-        ? optionalOrderStatus
-        : this.getNextOrderStatus(orderStatus);
     order.foodOrderStatus = this.getStringLiteralFromUnkown(
-      OrderStatus[orderStatusToLiteral]
+      OrderStatus[nextStatus]
     );
-    this.updateOrder(order);
+    if (nextStatus == OrderStatus.CONFIRMED) {
+      this.confirmOrder(order.id!);
+    } else {
+      this.updateOrder(order);
+    }
   }
 
   public removeOrder(order: FoodOrder) {
@@ -89,6 +89,8 @@ export class OrdersComponent {
   public getNextOrderStatus(orderStatus: OrderStatus) {
     switch (orderStatus) {
       case OrderStatus.WAITING:
+        return OrderStatus.CONFIRMED;
+      case OrderStatus.CONFIRMED:
         return OrderStatus.PREPARING;
       case OrderStatus.PREPARING:
         return OrderStatus.COMPLETE;
@@ -142,6 +144,16 @@ export class OrdersComponent {
             });
             break;
         }
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  private confirmOrder(id: number) {
+    this.orderService.confirmOrder(id).subscribe({
+      next: (response) => {
+        let updatedOrder: FoodOrder = response.data as FoodOrder;
+        console.log(response);
       },
       error: (error) => console.log(error),
     });
