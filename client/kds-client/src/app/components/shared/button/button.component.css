@@ -41,3 +41,11 @@
 :host-context(.finalizar-btn) button:hover {
   background-color: var(--pronto-color-hover);
 }
+
+:host-context(.confirmar-btn) button:hover {
+  background-color: var(--confirmar-color-hover);
+}
+
+:host-context(.confirmar-btn) button {
+  background-color: var(--confirmar-color);
+}

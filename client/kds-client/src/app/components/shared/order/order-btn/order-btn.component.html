@@ -16,7 +16,8 @@
   <app-button
     (onClick)="changeOrderStatus()"
     [ngClass]="{
-          'preparar-btn': orderStatus == getOrderStatus.WAITING,
+          'confirmar-btn': orderStatus == getOrderStatus.WAITING, 
+          'preparar-btn': orderStatus == getOrderStatus.CONFIRMED,
           'finalizar-btn':
             orderStatus == getOrderStatus.PREPARING ||
             orderStatus == getOrderStatus.COMPLETE || getOrderStatus.CANCELED,

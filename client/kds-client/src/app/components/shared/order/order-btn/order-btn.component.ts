@@ -28,6 +28,8 @@ export class OrderBtnComponent {
   public get getButtonName(): string {
     switch (this.orderStatus) {
       case OrderStatus.WAITING:
+        return 'Confirmar';
+      case OrderStatus.CONFIRMED:
         return 'Preparar';
       case OrderStatus.PREPARING:
         return 'Finalizar';

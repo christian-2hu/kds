@@ -5,12 +5,14 @@
 :root {
   --preparando-color: #1b4478;
   --preparando-color-hover: #2960a8;
-  --aguardando-color: #c93434;
+  --aguardando-color: #7d2020;
   --pronto-color: #3e9e49;
   --pronto-color-hover: #49bb57;
   --cancelado-color: #878787;
   --cancelado-color-hover: #6c6c6c;
   --cancelado-color-active: #9e9d9d;
+  --confirmar-color: #c93434;
+  --confirmar-color-hover: #b12e2e;
   --sidebar-bg: #2f4050;
   --sidebar-item-hover-bg: #293846;
   --menu-item-color: #a7b1c2;
@@ -24,6 +26,11 @@
 body {
   font-size: 16px;
   background-color: #dddddd;
+}
+
+.confirmado .color,
+.confirmado-color {
+  background-color: var(--confirmar-color) !important;
 }
 
 .preparando .color,
