@@ -11,7 +11,20 @@ import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.models.order.OrderStatus;
 
 public interface OrderRepository extends JpaRepository<FoodOrder, Long>{
-   @Query("SELECT foodOrder from FoodOrder foodOrder WHERE foodOrder.foodOrderStatus != OrderStatus.COMPLETE ORDER BY foodOrder.id DESC")
+   @Query(
+    """
+        SELECT 
+            foodOrder 
+        FROM 
+            FoodOrder foodOrder 
+        WHERE 
+            foodOrder.foodOrderStatus != OrderStatus.COMPLETE 
+        AND 
+            foodOrder.foodOrderStatus != OrderStatus.CANCELED 
+        ORDER BY 
+            foodOrder.id DESC
+    """
+    )
     public Page<FoodOrder> findAll(Pageable pageable);
 
     public Page<FoodOrder> findByFoodOrderStatus(OrderStatus foodOrderStatus, Pageable pageable);
