@@ -81,7 +81,9 @@ public class OrderController {
     public ResponseEntity<Response<FoodOrder>> update(@PathVariable Long id, @Valid @RequestBody OrderDTO order) {
         order.setId(id);
         FoodOrder updatedFoodOrder = storeOrderService.update(order);
-        emmitUpdatedOrderEvent(updatedFoodOrder);
+        if(updatedFoodOrder.getIfoodOrderId() != null) {
+            emmitUpdatedOrderEvent(updatedFoodOrder);
+        }
         return response.ok(updatedFoodOrder);
     }
     
