@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { ProgressBarModule } from 'primeng/progressbar';
 import { PaginatorModule } from 'primeng/paginator';
+import { CountDownComponent } from './components/shared/order/count-down/count-down.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { PaginatorModule } from 'primeng/paginator';
     SidebarComponent,
     UserInfoComponent,
     OrderBtnComponent,
+    CountDownComponent,
   ],
   imports: [
     BrowserModule,
