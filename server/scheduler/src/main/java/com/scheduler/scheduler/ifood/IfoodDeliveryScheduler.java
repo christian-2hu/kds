@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.scheduler.messaging.consumers.order.OrderEvent;
 import com.scheduler.messaging.producers.order.OrderMessageProducer;
 import com.scheduler.models.ifood.IfoodEventPolling;
 import com.scheduler.models.ifood.IfoodOrderStatus;
@@ -34,7 +35,7 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   @Override
-  public void emmitOrderEvent(Order order, String routingKey) {
+  public <T> void emmitOrderEvent(T order, String routingKey) {
     orderMessageProducer.sendMessage(order, routingKey);
   }
 
@@ -47,7 +48,9 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
           emmitOrderEvent(orderToEmmit, "order.created");
           break;
         case CANCELLED:
-          emmitOrderEvent(orderToEmmit, "order.canceled");
+          Order canceledOrderToEmit = ifooDeliveryService.convertToOrder(ifoodOrder);
+          OrderEvent event = new OrderEvent(canceledOrderToEmit.getIfoodOrderId(), canceledOrderToEmit.getFoodOrderStatus(), null, null); 
+          emmitOrderEvent(event, "order.canceled");
           break;
         default:
           LOGGER.info("Not supported yet: " + orderToEmmit.toString());
