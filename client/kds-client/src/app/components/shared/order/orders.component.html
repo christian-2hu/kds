@@ -50,6 +50,23 @@
               {{ order.observations }}
             </div>
           </div>
+          <div
+            *ngIf="
+              order.ifoodOrderId != undefined &&
+              order.foodOrderStatus == orderStatus[orderStatus.WAITING]
+            "
+            class="observation mx-2 mb-3"
+          >
+            <div class="title">Delivery:</div>
+            <div class="body">
+              You have to confirm this order in
+              <strong
+                ><app-count-down
+                  [seconds]="getRemainingTimeToConfirmOrder(order.createdAt)"
+                ></app-count-down
+              ></strong>
+            </div>
+          </div>
         </div>
         <div class="orderBtn">
           <app-order-btn

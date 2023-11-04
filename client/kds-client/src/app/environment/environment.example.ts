@@ -2,4 +2,9 @@
 export const Environment = {
   api: 'http://example.com/api',
   ordersFetchIntervalMs: 30000,
+  delivery: {
+    ifood: {
+      confirmationDeadlineInSeconds: 480,
+    },
+  },
 };

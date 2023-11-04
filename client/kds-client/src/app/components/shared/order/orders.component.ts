@@ -1,8 +1,14 @@
 import { ReturnStatement } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PaginatorState } from 'primeng/paginator';
 import { Observable } from 'rxjs';
+import { Environment } from 'src/app/environment/environment';
 import { OrderStatus } from 'src/app/models/food-order-status.model';
 import { FoodOrder } from 'src/app/models/food-order.model';
 import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
@@ -14,12 +20,12 @@ import Swal from 'sweetalert2';
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersComponent {
   public orderStatus = OrderStatus;
   @Input({ required: true }) public foodOrders: FoodOrder[] = [];
   @Input({ required: true }) public ordersPagination!: PaginationResponse;
-
   constructor(private orderService: OrderService, private router: Router) {}
 
   public async onChangeOrderStatus(
@@ -125,6 +131,16 @@ export class OrdersComponent {
         this.foodOrders.splice(i, 1);
       }
     });
+  }
+
+  public getRemainingTimeToConfirmOrder(date: Date) {
+    date = new Date(date);
+    let currentDate = new Date();
+    let createdAtUnixTimestampSeconds =
+      Math.floor(date.getTime() / 1000) +
+      Environment.delivery.ifood.confirmationDeadlineInSeconds;
+    let currentTimeSeconds = Math.floor(currentDate.getTime() / 1000);
+    return createdAtUnixTimestampSeconds - currentTimeSeconds;
   }
 
   private updateOrder(order: FoodOrder) {
