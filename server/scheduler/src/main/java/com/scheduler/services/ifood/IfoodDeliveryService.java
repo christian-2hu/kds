@@ -73,10 +73,13 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     }
 
     @Override
-    public void acknowledgeOrder(String orderId) {
+    public void acknowledgeOrders(String... ids) {
         checkBearerToken();
-        EventAcknowledgmentRequest eventAcknowledgmentRequest = new EventAcknowledgmentRequest(orderId);
-        EventAcknowledgmentRequest[] eventAcknowledgments = {eventAcknowledgmentRequest};
+        EventAcknowledgmentRequest[] eventAcknowledgments = new EventAcknowledgmentRequest[ids.length];
+        for (int i = 0; i < eventAcknowledgments.length; i++) {
+            EventAcknowledgmentRequest eventAcknowledgmentRequest = new EventAcknowledgmentRequest(ids[i]);
+            eventAcknowledgments[i] = eventAcknowledgmentRequest;
+        }
         apiConsumerService.postContent(merchantApiHost + "/order/v1.0/events/acknowledgment", eventAcknowledgments, Object[].class);
     }
 

@@ -62,7 +62,7 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   private void acknowledgeOrder(IfoodEventPolling order) {
-    ifooDeliveryService.acknowledgeOrder(order.getId());
+    ifooDeliveryService.acknowledgeOrders(order.getId());
   }
 
 }

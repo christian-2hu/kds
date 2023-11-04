@@ -11,7 +11,7 @@ public interface DeliveryService<T> {
     public void confirmOrder(String orderId);
     public void prepareOrder(String orderId);
     public void finishOrder(String orderId);
-    public void acknowledgeOrder(String orderId);
+    public void acknowledgeOrders(String... ids);
     //TODO: Change the D generic inheritance for a more generic object 
     public <D extends IfoodOrderStatus> Order convertToOrder(D deliveryOrder);
 }
