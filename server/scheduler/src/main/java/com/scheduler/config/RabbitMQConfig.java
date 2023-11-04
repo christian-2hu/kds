@@ -23,6 +23,9 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.order.created.name}")
     private String createdQueueName;
 
+    @Value("${rabbitmq.queue.order.canceled.name}")
+    private String canceledQueueName;
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
@@ -38,7 +41,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue createdOrderQueue() {
         return new Queue(createdQueueName, true);
+    }
 
+    @Bean
+    public Queue canceledOrderQueue() {
+        return new Queue(createdQueueName, true);
     }
 
     @Bean
@@ -54,6 +61,11 @@ public class RabbitMQConfig {
     @Bean
     public Binding createdOrderBinding(Queue createdOrderQueue, TopicExchange exchange) {
         return BindingBuilder.bind(createdOrderQueue).to(exchange).with("order.created");
+    }
+
+    @Bean
+    public Binding canceledOrderBinding(Queue createdOrderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(createdOrderQueue).to(exchange).with("order.canceled");
     }
 
     @Bean

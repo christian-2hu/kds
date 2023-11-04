@@ -69,7 +69,13 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     @Override
     public void finishOrder(String orderId) {
         String readyToPickupEndpoint = String.format("%s/order/v1.0/orders/%s/readyToPickup", merchantApiHost, orderId);
-        apiConsumerService.postContent(readyToPickupEndpoint);    
+        apiConsumerService.postContent(readyToPickupEndpoint);  
+    }
+
+    @Override
+    public <U> void cancelOrder(String orderId, U cancelDetails) {
+        String requestCancellationendpoint = String.format("%s/order/v1.0/orders/%s/requestCancellation", merchantApiHost, orderId);
+        apiConsumerService.postContent(requestCancellationendpoint, cancelDetails, null); 
     }
 
     @Override

@@ -46,8 +46,10 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
         case PLACED:
           emmitOrderEvent(orderToEmmit, "order.created");
           break;
+        case CANCELLED:
+          emmitOrderEvent(orderToEmmit, "order.canceled");
+          break;
         default:
-        // In this case, since the eventPolling endpoint gets only PLACED and CANCELED, this is the canceled order
           LOGGER.info("Not supported yet: " + orderToEmmit.toString());
           break;
       }

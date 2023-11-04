@@ -1,21 +1,15 @@
-package com.scheduler.messaging.consumers.order;
-
-import com.scheduler.models.ifood.OrderStatus;
+package com.scheduler.models.ifood;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
-@ToString
-public class OrderEvent {
-    private String orderId;
-    private OrderStatus updatedOrderStatus;
+@Getter
+public class IfoodRequestCancellation {
     // TODO: transform this into an enum
     private String cancellationCode;
     private String reason;
