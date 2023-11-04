@@ -19,7 +19,10 @@ public class OrderCanceledMessageConsumer implements MessageConsumer<OrderEvent>
 
     @RabbitListener(queues = {"${rabbitmq.queue.order.canceled.name}"})
     @Override
-    public void getMessage(OrderEvent message){
+    public void getMessage(OrderEvent message) {
+        if(message.getCancellationCode() == null && message.getReason() == null) {
+            return;
+        }
         LOGGER.info(String.format("Received message on canceledQueue-> %s", message.toString()));
         handleMessage(message);
     }
