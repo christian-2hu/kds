@@ -27,6 +27,8 @@ rabbitmq:
         name: updatedOrderQueue
       created:
         name: createdOrderQueue
+      canceled:
+        name: canceledOrderQueue
   exchange:
     name: exchangeName
   routing-key: routingKey

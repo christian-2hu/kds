@@ -45,7 +45,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue canceledOrderQueue() {
-        return new Queue(createdQueueName, true);
+        return new Queue(canceledQueueName, true);
     }
 
     @Bean
@@ -64,8 +64,8 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding canceledOrderBinding(Queue createdOrderQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(createdOrderQueue).to(exchange).with("order.canceled");
+    public Binding canceledOrderBinding(Queue canceledOrderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(canceledOrderQueue).to(exchange).with("order.canceled");
     }
 
     @Bean
