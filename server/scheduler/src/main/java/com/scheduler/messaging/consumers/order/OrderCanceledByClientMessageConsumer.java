@@ -13,15 +13,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class OrderCanceledMessageConsumer implements MessageConsumer<OrderEvent> {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderUpdatedMessageConsumer.class);
+public class OrderCanceledByClientMessageConsumer implements MessageConsumer<OrderEvent> {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderCanceledByClientMessageConsumer.class);
     private final DeliveryService<?> ifoodDeliveryService;
 
-    @RabbitListener(queues = {"${rabbitmq.queue.order.canceled.name}"})
+    @RabbitListener(queues = {"${rabbitmq.queue.order.canceled.byClient}"})
     @Override
     public void getMessage(OrderEvent message) {
         if(message.getCancellationCode() == null && message.getReason() == null) {
-            return;
+            message.setCancellationCode("503");
+            message.setReason("Acabou o queijo");
+            // return;
         }
         LOGGER.info(String.format("Received message on canceledQueue-> %s", message.toString()));
         handleMessage(message);
