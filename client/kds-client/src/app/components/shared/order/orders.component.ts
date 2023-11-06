@@ -20,7 +20,6 @@ import Swal from 'sweetalert2';
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersComponent {
   public orderStatus = OrderStatus;
