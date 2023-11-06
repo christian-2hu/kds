@@ -40,24 +40,24 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   private void emmitOrder(List<IfoodEventPolling> orders) {
-    orders.forEach((order) -> {
+    for (IfoodEventPolling order : orders) {
       IfoodOrderStatus ifoodOrder = getIfoodOrderFromPolling(order);
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
       switch (order.getFullCode()) {
-        case PLACED:
-          emmitOrderEvent(orderToEmmit, "order.created");
-          break;
         case CANCELLED:
           Order canceledOrderToEmit = ifooDeliveryService.convertToOrder(ifoodOrder);
           OrderEvent event = new OrderEvent(canceledOrderToEmit.getIfoodOrderId(), canceledOrderToEmit.getFoodOrderStatus(), null, null); 
-          emmitOrderEvent(event, "order.canceled");
+          emmitOrderEvent(event, "order.server.canceled");
+          break;
+        case PLACED:
+          emmitOrderEvent(orderToEmmit, "order.created");
           break;
         default:
           LOGGER.info("Not supported yet: " + orderToEmmit.toString());
           break;
       }
       acknowledgeOrder(order);
-    });
+    }
   } 
 
   private IfoodOrderStatus getIfoodOrderFromPolling(IfoodEventPolling order) {
