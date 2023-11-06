@@ -12,20 +12,21 @@ import com.kdsAPI.services.AbstractService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @Component
 @RequiredArgsConstructor
-public class OrderMessageConsumer implements MessageConsumer<OrderDTO> {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderMessageConsumer.class);
+public class OrderCreatedMessageConsumer implements MessageConsumer<OrderDTO> {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderCreatedMessageConsumer.class);
     private final AbstractService<FoodOrder, OrderDTO> ifoodOrderService;
 
     @RabbitListener(queues = {"${rabbitmq.queue.order.created.name}"})
     @Override
     public void getMessage(OrderDTO message){
-        LOGGER.info(String.format("Received message -> %s", message.toString()));
+        LOGGER.info(String.format("Received message on created -> %s", message.toString()));
+        if(message.getIfoodOrderId() == null) {
+            return;
+        }
         FoodOrder order = ifoodOrderService.save(message);
         LOGGER.info(String.format("Order got from event was saved with id %s!", order.getId()));
     }
-    // TODO: consume the queue.order.updated and update it using the ifoodOrderService
+
 }
