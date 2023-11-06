@@ -3,6 +3,7 @@ package com.kdsAPI.services.ifood;
 import org.springframework.stereotype.Service;
 
 import com.kdsAPI.dto.order.OrderDTO;
+import com.kdsAPI.exception.NotFoundException;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.repositories.OrderRepository;
 import com.kdsAPI.services.AbstractOrderService;
@@ -15,6 +16,8 @@ public class IfoodOrderService extends AbstractOrderService {
         super(repository);
     }
 
+    
+
     @Override 
     public FoodOrder update(OrderDTO dto) {
         FoodOrder updatedOrder = findByIfoodOrderId(dto.getIfoodOrderId());
@@ -24,6 +27,7 @@ public class IfoodOrderService extends AbstractOrderService {
 
     private FoodOrder findByIfoodOrderId(String findByIfoodOrderId) {
         OrderRepository repository = (OrderRepository) this.repository;
-        return repository.findByIfoodOrderId(findByIfoodOrderId);
+        return repository.findByIfoodOrderId(findByIfoodOrderId)
+            .orElseThrow(() -> new NotFoundException());
     }
 }
