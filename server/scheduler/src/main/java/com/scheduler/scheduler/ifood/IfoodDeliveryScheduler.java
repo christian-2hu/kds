@@ -45,8 +45,7 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
       switch (order.getFullCode()) {
         case CANCELLED:
-          Order canceledOrderToEmit = ifooDeliveryService.convertToOrder(ifoodOrder);
-          OrderEvent event = new OrderEvent(canceledOrderToEmit.getIfoodOrderId(), canceledOrderToEmit.getFoodOrderStatus(), null, null); 
+          OrderEvent event = new OrderEvent(orderToEmmit.getIfoodOrderId(), orderToEmmit.getFoodOrderStatus(), null, null); 
           emmitOrderEvent(event, "order.server.canceled");
           break;
         case PLACED:
