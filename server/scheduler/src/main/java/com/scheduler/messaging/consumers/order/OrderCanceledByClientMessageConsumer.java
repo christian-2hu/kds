@@ -21,9 +21,8 @@ public class OrderCanceledByClientMessageConsumer implements MessageConsumer<Ord
     @Override
     public void getMessage(OrderEvent message) {
         if(message.getCancellationCode() == null && message.getReason() == null) {
-            message.setCancellationCode("503");
-            message.setReason("Acabou o queijo");
-            // return;
+            LOGGER.error("Client needs to sent both cancelatioNCode and reason to cancel an order");
+            return;
         }
         LOGGER.info(String.format("Received message on canceledQueue-> %s", message.toString()));
         handleMessage(message);
