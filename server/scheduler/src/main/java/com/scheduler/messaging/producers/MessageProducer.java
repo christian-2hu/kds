@@ -12,9 +12,6 @@ public abstract class MessageProducer {
     @Value("${rabbitmq.exchange.name}")
     protected String exchange;
 
-    @Value("${rabbitmq.routing-key}")
-    protected String routingKey;
-
     protected static final Logger LOGGER = LoggerFactory.getLogger(MessageProducer.class);
     protected final RabbitTemplate rabbitTemplate;
 
