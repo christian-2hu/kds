@@ -79,7 +79,7 @@ public class OrderController {
         orderDTO.setFoodOrderStatus(OrderStatus.CONFIRMED);
         FoodOrder updatedOrder = storeOrderService.update(orderDTO);
         if(updatedOrder.getIfoodOrderId() != null) {
-            emmitUpdatedOrderEvent(updatedOrder);
+            emmitOrderEvent(updatedOrder);
         }
         return response.ok(updatedOrder);
     }
@@ -95,16 +95,20 @@ public class OrderController {
         order.setId(id);
         FoodOrder updatedFoodOrder = storeOrderService.update(order);
         if(updatedFoodOrder.getIfoodOrderId() != null) {
-            emmitUpdatedOrderEvent(updatedFoodOrder);
+            emmitOrderEvent(updatedFoodOrder);
         }
         return response.ok(updatedFoodOrder);
     }
     
-    private void emmitUpdatedOrderEvent(FoodOrder order) {
-        if(order.getIfoodOrderId() == null || order.getFoodOrderStatus() == OrderStatus.WAITING) {
+    private void emmitOrderEvent(FoodOrder order) {
+        if(order.getFoodOrderStatus() == OrderStatus.WAITING) {
             return;
         }
         OrderEvent orderEvent = new OrderEvent(order.getIfoodOrderId(), order.getFoodOrderStatus());
+        if(order.getFoodOrderStatus() == OrderStatus.CANCELED) {
+             orderMessageProducer.sendMessage(orderEvent, "order.client.canceled");
+             return;
+        }
         orderMessageProducer.sendMessage(orderEvent, "order.updated");
     }
 }
