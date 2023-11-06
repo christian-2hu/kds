@@ -23,6 +23,15 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queue.order.created.name}")
     private String createdQueueName;
 
+    @Value("${rabbitmq.queue.order.canceled.name}")
+    private String canceledQueueName;
+
+    @Value("${rabbitmq.queue.order.canceled.byServer}")
+    private String canceledByServerQueue;
+
+    @Value("${rabbitmq.queue.order.canceled.byClient}")
+    private String canceledByClientQueue;
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
@@ -38,7 +47,21 @@ public class RabbitMQConfig {
     @Bean
     public Queue createdOrderQueue() {
         return new Queue(createdQueueName, true);
+    }
 
+    @Bean
+    public Queue canceledOrderQueue() {
+        return new Queue(canceledQueueName, true);
+    }
+
+    @Bean
+    public Queue canceledByClientQueue() {
+        return new Queue(canceledByClientQueue, true);
+    }
+
+    @Bean
+    public Queue canceledByServerQueue() {
+        return new Queue(canceledByServerQueue, true);
     }
 
     @Bean
@@ -54,6 +77,21 @@ public class RabbitMQConfig {
     @Bean
     public Binding createdOrderBinding(Queue createdOrderQueue, TopicExchange exchange) {
         return BindingBuilder.bind(createdOrderQueue).to(exchange).with("order.created");
+    }
+
+    @Bean
+    public Binding canceledOrderBinding(Queue canceledOrderQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(canceledOrderQueue).to(exchange).with("order.canceled");
+    }
+
+    @Bean
+    public Binding canceledByServerBinding(Queue canceledByServerQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(canceledByServerQueue).to(exchange).with("order.server.canceled");
+    }
+
+    @Bean
+    public Binding canceledByClientBinding(Queue canceledByClientQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(canceledByClientQueue).to(exchange).with("order.client.canceled");
     }
 
     @Bean
