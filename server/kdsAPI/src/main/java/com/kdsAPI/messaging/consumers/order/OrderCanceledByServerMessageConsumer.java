@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 
 import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.messaging.consumers.MessageConsumer;
-import com.kdsAPI.models.CanceledOrderEvent;
 import com.kdsAPI.models.FoodOrder;
+import com.kdsAPI.models.OrderDetails;
 import com.kdsAPI.services.AbstractOrderService;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class OrderCanceledByServerMessageConsumer implements MessageConsumer<CanceledOrderEvent> {
+public class OrderCanceledByServerMessageConsumer implements MessageConsumer<OrderDetails> {
     protected static final Logger LOGGER = LoggerFactory.getLogger(OrderCanceledByServerMessageConsumer.class);
     private final AbstractOrderService ifoodOrderService;
 
     @RabbitListener(queues = {"${rabbitmq.queue.order.canceled.byServer}"})
     @Override
-    public void getMessage(CanceledOrderEvent message){
+    public void getMessage(OrderDetails message){
         if(message.getCancellationCode() != null || message.getReason() != null) {
             return;
         }
@@ -29,7 +29,7 @@ public class OrderCanceledByServerMessageConsumer implements MessageConsumer<Can
         handleMessage(message);
     }
     
-    private void handleMessage(CanceledOrderEvent message) {
+    private void handleMessage(OrderDetails message) {
         FoodOrder foundOrder = ifoodOrderService.getByOrderId(message.getOrderId());
         foundOrder.setFoodOrderStatus(message.getUpdatedOrderStatus());
         OrderDTO dto = new OrderDTO();

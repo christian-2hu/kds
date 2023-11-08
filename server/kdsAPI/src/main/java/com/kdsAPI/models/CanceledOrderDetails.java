@@ -1,7 +1,6 @@
 package com.kdsAPI.models;
 
-import com.kdsAPI.models.order.OrderStatus;
-
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,10 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CanceledOrderEvent {
-    private String orderId;
-    private OrderStatus updatedOrderStatus;
+public class CanceledOrderDetails {
     // TODO: transform this into an enum
-    private String cancellationCode;
-    private String reason;
+    @NotEmpty(message = "\"This field cannot be empty\"")
+    protected String cancellationCode;
+    @NotEmpty(message = "\"This field cannot be empty\"")
+    protected String reason;
 }
