@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class MessageProducer<T> {
+public abstract class MessageProducer {
     @Value("${rabbitmq.exchange.name}")
     protected String exchange;
-
-    @Value("${rabbitmq.routing-key}")
-    protected String routingKey;
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(MessageProducer.class);
     protected final RabbitTemplate rabbitTemplate;
 
-    public void sendMessage(T message, String routingKey) {
+    public <T> void sendMessage(T message, String routingKey) {
         LOGGER.info(String.format("Message sent -> %s", message.toString()));
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }

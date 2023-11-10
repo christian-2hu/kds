@@ -12,22 +12,20 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class OrderMessageConsumer implements MessageConsumer<OrderEvent> {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderMessageConsumer.class);
+public class OrderUpdatedMessageConsumer implements MessageConsumer<OrderEvent> {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(OrderUpdatedMessageConsumer.class);
     private final DeliveryService<?> ifoodDeliveryService;
 
     @RabbitListener(queues = {"${rabbitmq.queue.order.updated.name}"})
     @Override
     public void getMessage(OrderEvent message){
-        LOGGER.info(String.format("Received message -> %s", message.toString()));
+        LOGGER.info(String.format("Received message on updatedQueue-> %s", message.toString()));
         handleMessage(message);
     }
 
     private void handleMessage(OrderEvent message) {
         switch(message.getUpdatedOrderStatus()) {
             // TODO: this need a dedicated implementation, as this is a cancelation that came from the client
-            case CANCELED:
-                break;
             case COMPLETE:
                 ifoodDeliveryService.finishOrder(message.getOrderId());
                 break;

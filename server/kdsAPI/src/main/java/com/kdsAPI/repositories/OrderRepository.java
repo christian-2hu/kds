@@ -3,6 +3,8 @@ package com.kdsAPI.repositories;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +31,6 @@ public interface OrderRepository extends JpaRepository<FoodOrder, Long>{
 
     public Page<FoodOrder> findByFoodOrderStatus(OrderStatus foodOrderStatus, Pageable pageable);
 
-    public FoodOrder findByIfoodOrderId(String ifoodOrderId);
+    // TODO: change this name, this repository is not only for ifood but for delivery services in general
+    public Optional<FoodOrder> findByIfoodOrderId(String ifoodOrderId);
 }

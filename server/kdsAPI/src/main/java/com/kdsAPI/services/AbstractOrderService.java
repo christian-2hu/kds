@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kdsAPI.dto.item.ItemDTO;
 import com.kdsAPI.dto.order.OrderDTO;
+import com.kdsAPI.exception.NotFoundException;
 import com.kdsAPI.models.FoodItem;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.repositories.OrderRepository;
@@ -23,6 +24,12 @@ public class AbstractOrderService extends AbstractService<FoodOrder, OrderDTO>{
         List<FoodItem> items = processItems(order.getOrders());
         order.setOrders(items);
         return repository.save(order.convertToDAO());
+    }
+
+    public FoodOrder getByOrderId(String orderId) {
+        OrderRepository repository = (OrderRepository) this.repository;
+        return repository.findByIfoodOrderId(orderId)
+            .orElseThrow(() -> new NotFoundException());
     }
 
     protected List<FoodItem> processItems(List<FoodItem> items) {

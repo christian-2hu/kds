@@ -1,14 +1,22 @@
 import { ReturnStatement } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { PaginatorState } from 'primeng/paginator';
 import { Observable } from 'rxjs';
+import { Environment } from 'src/app/environment/environment';
+import { CanceledOrderDetails } from 'src/app/models/cancel-order-event.model';
 import { OrderStatus } from 'src/app/models/food-order-status.model';
 import { FoodOrder } from 'src/app/models/food-order.model';
+import { IfoodCancellationCode } from 'src/app/models/ifood-cancellation-codes.model';
 import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
 import { PaginationResponse } from 'src/app/models/pagination-response.model';
 import { OrderService } from 'src/app/services/order/order.service';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 @Component({
   selector: 'app-orders',
@@ -19,7 +27,6 @@ export class OrdersComponent {
   public orderStatus = OrderStatus;
   @Input({ required: true }) public foodOrders: FoodOrder[] = [];
   @Input({ required: true }) public ordersPagination!: PaginationResponse;
-
   constructor(private orderService: OrderService, private router: Router) {}
 
   public async onChangeOrderStatus(
@@ -33,24 +40,86 @@ export class OrdersComponent {
       optionalOrderStatus != undefined
         ? optionalOrderStatus
         : this.getNextOrderStatus(orderStatus);
-    if (
-      nextStatus == OrderStatus.COMPLETE ||
-      nextStatus == OrderStatus.CANCELED
-    ) {
+    if (nextStatus == OrderStatus.COMPLETE) {
       const userInput = this.warnUserAboutUpdatingOrder(order, nextStatus);
       if ((await userInput).isDenied || (await userInput).isDismissed) {
         return;
       }
     }
 
+    let canceledOrderEvent!: CanceledOrderDetails;
+    if (nextStatus == OrderStatus.CANCELED) {
+      const cancellationDetails = this.getCancellationDetails();
+      if (
+        (await cancellationDetails).isDenied ||
+        (await cancellationDetails).isDismissed
+      ) {
+        return;
+      }
+      canceledOrderEvent = (await cancellationDetails).value!;
+    }
+
     order.foodOrderStatus = this.getStringLiteralFromUnkown(
       OrderStatus[nextStatus]
     );
-    if (nextStatus == OrderStatus.CONFIRMED) {
-      this.confirmOrder(order.id!);
-    } else {
-      this.updateOrder(order);
+
+    switch (nextStatus) {
+      case OrderStatus.CONFIRMED:
+        this.confirmOrder(order.id!);
+        break;
+      case OrderStatus.CANCELED:
+        console.log(order.id, canceledOrderEvent);
+        this.cancelOrder(order.id!, canceledOrderEvent);
+        break;
+      default:
+        this.updateOrder(order);
     }
+  }
+
+  private async getCancellationDetails(): Promise<
+    SweetAlertResult<CanceledOrderDetails>
+  > {
+    let cancellationCodes = Object.values(IfoodCancellationCode).filter(
+      (v) => !isNaN(Number(v))
+    );
+    let cancellationCodesMap = new Map<number, string>();
+    cancellationCodes.forEach((key) => {
+      cancellationCodesMap.set(
+        key as number,
+        IfoodCancellationCode[key as number]
+      );
+    });
+    const userInput = await Swal.fire<string>({
+      title: 'Select field validation',
+      input: 'select',
+      inputOptions: {
+        'Motivo do cancelamento': cancellationCodesMap,
+      },
+      inputPlaceholder: 'Selecione o motivo do cancelamento',
+      showCancelButton: true,
+    });
+
+    const cancellationReason = await Swal.fire<string>({
+      title: 'Select field validation',
+      input: 'text',
+
+      inputPlaceholder: 'Selecione o motivo do cancelamento',
+      showCancelButton: true,
+    });
+
+    let cancellationDetails: CanceledOrderDetails = {
+      cancellationCode: userInput.value as string,
+      reason: cancellationReason.value as string,
+    };
+    return {
+      isConfirmed:
+        userInput.isConfirmed == true && cancellationReason.isConfirmed == true,
+      isDenied:
+        userInput.isDenied == true || cancellationReason.isDenied == true,
+      isDismissed:
+        userInput.isDismissed == true || cancellationReason.isDismissed == true,
+      value: cancellationDetails,
+    };
   }
 
   public removeOrder(order: FoodOrder) {
@@ -127,6 +196,16 @@ export class OrdersComponent {
     });
   }
 
+  public getRemainingTimeToConfirmOrder(date: Date) {
+    date = new Date(date);
+    let currentDate = new Date();
+    let createdAtUnixTimestampSeconds =
+      Math.floor(date.getTime() / 1000) +
+      Environment.delivery.ifood.confirmationDeadlineInSeconds;
+    let currentTimeSeconds = Math.floor(currentDate.getTime() / 1000);
+    return createdAtUnixTimestampSeconds - currentTimeSeconds;
+  }
+
   private updateOrder(order: FoodOrder) {
     this.orderService.updateOrder(order).subscribe({
       next: (response) => {
@@ -151,6 +230,16 @@ export class OrdersComponent {
 
   private confirmOrder(id: number) {
     this.orderService.confirmOrder(id).subscribe({
+      next: (response) => {
+        let updatedOrder: FoodOrder = response.data as FoodOrder;
+        console.log(updatedOrder);
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  private cancelOrder(id: number, canceledOrderEvent: CanceledOrderDetails) {
+    this.orderService.cancelOrder(id, canceledOrderEvent).subscribe({
       next: (response) => {
         let updatedOrder: FoodOrder = response.data as FoodOrder;
         console.log(response);

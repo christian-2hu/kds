@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.scheduler.messaging.consumers.order.OrderEvent;
 import com.scheduler.messaging.producers.order.OrderMessageProducer;
 import com.scheduler.models.ifood.IfoodEventPolling;
 import com.scheduler.models.ifood.IfoodOrderStatus;
@@ -34,25 +35,28 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   @Override
-  public void emmitOrderEvent(Order order, String routingKey) {
+  public <T> void emmitOrderEvent(T order, String routingKey) {
     orderMessageProducer.sendMessage(order, routingKey);
   }
 
   private void emmitOrder(List<IfoodEventPolling> orders) {
-    orders.forEach((order) -> {
+    for (IfoodEventPolling order : orders) {
       IfoodOrderStatus ifoodOrder = getIfoodOrderFromPolling(order);
       Order orderToEmmit = ifooDeliveryService.convertToOrder(ifoodOrder);
       switch (order.getFullCode()) {
+        case CANCELLED:
+          OrderEvent event = new OrderEvent(orderToEmmit.getIfoodOrderId(), orderToEmmit.getFoodOrderStatus(), null, null); 
+          emmitOrderEvent(event, "order.server.canceled");
+          break;
         case PLACED:
           emmitOrderEvent(orderToEmmit, "order.created");
           break;
         default:
-        // In this case, since the eventPolling endpoint gets only PLACED and CANCELED, this is the canceled order
           LOGGER.info("Not supported yet: " + orderToEmmit.toString());
           break;
       }
       acknowledgeOrder(order);
-    });
+    }
   } 
 
   private IfoodOrderStatus getIfoodOrderFromPolling(IfoodEventPolling order) {
@@ -62,7 +66,7 @@ public class IfoodDeliveryScheduler extends DeliveryScheduler {
   }
 
   private void acknowledgeOrder(IfoodEventPolling order) {
-    ifooDeliveryService.acknowledgeOrder(order.getId());
+    ifooDeliveryService.acknowledgeOrders(order.getId());
   }
 
 }

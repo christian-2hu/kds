@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Environment } from 'src/app/environment/environment';
+import { CanceledOrderDetails } from 'src/app/models/cancel-order-event.model';
 import { FoodOrder } from 'src/app/models/food-order.model';
 import { PaginatedContentResponse } from 'src/app/models/paginated-content-response.model';
 import { Response } from 'src/app/models/server-response.model';
@@ -39,8 +40,15 @@ export class OrderService {
 
   public confirmOrder(id: number) {
     return this.http.post<Response<FoodOrder>>(
-      `${Environment.api}/order/${id}`,
+      `${Environment.api}/order/confirm/${id}`,
       null
+    );
+  }
+
+  public cancelOrder(id: number, canceledOrderEvent: CanceledOrderDetails) {
+    return this.http.post<Response<FoodOrder>>(
+      `${Environment.api}/order/cancel/${id}`,
+      canceledOrderEvent
     );
   }
 

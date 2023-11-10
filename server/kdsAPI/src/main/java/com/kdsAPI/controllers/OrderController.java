@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kdsAPI.dto.order.OrderDTO;
 import com.kdsAPI.messaging.producers.MessageProducer;
 import com.kdsAPI.messaging.producers.order.OrderEvent;
+import com.kdsAPI.models.CanceledOrderDetails;
 import com.kdsAPI.models.FoodOrder;
 import com.kdsAPI.models.order.OrderStatus;
 import com.kdsAPI.repositories.OrderRepository;
@@ -71,15 +72,27 @@ public class OrderController {
         return response.ok(saveOrder);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/confirm/{id}")
     public ResponseEntity<Response<FoodOrder>> confirmOrder(@PathVariable Long id) {
-        FoodOrder order = storeOrderService.getById(id);
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.convertToDTO(order);
-        orderDTO.setFoodOrderStatus(OrderStatus.CONFIRMED);
-        FoodOrder updatedOrder = storeOrderService.update(orderDTO);
+        FoodOrder updatedOrder = updatOrderStatusById(id, OrderStatus.CONFIRMED);
         if(updatedOrder.getIfoodOrderId() != null) {
-            emmitUpdatedOrderEvent(updatedOrder);
+            OrderEvent event = new OrderEvent(updatedOrder.getIfoodOrderId(), updatedOrder.getFoodOrderStatus());
+            emmitOrderEvent(updatedOrder, event);
+        }
+        return response.ok(updatedOrder);
+    }
+
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<Response<FoodOrder>> cancelOrder(@PathVariable Long id, @Valid @RequestBody CanceledOrderDetails canceledOrderEvent) {
+        FoodOrder updatedOrder = updatOrderStatusById(id, OrderStatus.CANCELED);
+        if(updatedOrder.getIfoodOrderId() != null) {
+            OrderEvent event = new OrderEvent(
+                updatedOrder.getIfoodOrderId(), 
+                updatedOrder.getFoodOrderStatus(),
+                canceledOrderEvent.getCancellationCode(),
+                canceledOrderEvent.getReason()
+            );
+            emmitOrderEvent(updatedOrder, event);
         }
         return response.ok(updatedOrder);
     }
@@ -95,16 +108,29 @@ public class OrderController {
         order.setId(id);
         FoodOrder updatedFoodOrder = storeOrderService.update(order);
         if(updatedFoodOrder.getIfoodOrderId() != null) {
-            emmitUpdatedOrderEvent(updatedFoodOrder);
+            OrderEvent event = new OrderEvent(order.getIfoodOrderId(), order.getFoodOrderStatus());
+            emmitOrderEvent(updatedFoodOrder, event);
         }
         return response.ok(updatedFoodOrder);
     }
     
-    private void emmitUpdatedOrderEvent(FoodOrder order) {
-        if(order.getIfoodOrderId() == null || order.getFoodOrderStatus() == OrderStatus.WAITING) {
+    private FoodOrder updatOrderStatusById(Long id, OrderStatus orderStatus) {
+        FoodOrder order = storeOrderService.getById(id);
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.convertToDTO(order);
+        orderDTO.setFoodOrderStatus(orderStatus);
+        return storeOrderService.update(orderDTO);
+    }
+
+    private void emmitOrderEvent(FoodOrder order, OrderEvent orderEvent) {
+        if(order.getFoodOrderStatus() == OrderStatus.WAITING) {
             return;
         }
-        OrderEvent orderEvent = new OrderEvent(order.getIfoodOrderId(), order.getFoodOrderStatus());
+        if(order.getFoodOrderStatus() == OrderStatus.CANCELED) {
+             orderMessageProducer.sendMessage(orderEvent, "order.client.canceled");
+             return;
+        }
         orderMessageProducer.sendMessage(orderEvent, "order.updated");
     }
+
 }

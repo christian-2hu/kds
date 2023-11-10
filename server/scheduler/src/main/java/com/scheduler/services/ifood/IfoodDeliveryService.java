@@ -69,14 +69,23 @@ public class IfoodDeliveryService implements DeliveryService<IfoodEventPolling> 
     @Override
     public void finishOrder(String orderId) {
         String readyToPickupEndpoint = String.format("%s/order/v1.0/orders/%s/readyToPickup", merchantApiHost, orderId);
-        apiConsumerService.postContent(readyToPickupEndpoint);    
+        apiConsumerService.postContent(readyToPickupEndpoint);  
     }
 
     @Override
-    public void acknowledgeOrder(String orderId) {
+    public <U> void cancelOrder(String orderId, U cancelDetails) {
+        String requestCancellationendpoint = String.format("%s/order/v1.0/orders/%s/requestCancellation", merchantApiHost, orderId);
+        apiConsumerService.postContent(requestCancellationendpoint, cancelDetails, Object[].class); 
+    }
+
+    @Override
+    public void acknowledgeOrders(String... ids) {
         checkBearerToken();
-        EventAcknowledgmentRequest eventAcknowledgmentRequest = new EventAcknowledgmentRequest(orderId);
-        EventAcknowledgmentRequest[] eventAcknowledgments = {eventAcknowledgmentRequest};
+        EventAcknowledgmentRequest[] eventAcknowledgments = new EventAcknowledgmentRequest[ids.length];
+        for (int i = 0; i < eventAcknowledgments.length; i++) {
+            EventAcknowledgmentRequest eventAcknowledgmentRequest = new EventAcknowledgmentRequest(ids[i]);
+            eventAcknowledgments[i] = eventAcknowledgmentRequest;
+        }
         apiConsumerService.postContent(merchantApiHost + "/order/v1.0/events/acknowledgment", eventAcknowledgments, Object[].class);
     }
 
